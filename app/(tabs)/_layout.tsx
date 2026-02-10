@@ -39,7 +39,7 @@ export default function TabLayout() {
         name="fildactualite"
         options={{
           title: 'Communaute',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="feed-outline" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
         }}
       />
       
