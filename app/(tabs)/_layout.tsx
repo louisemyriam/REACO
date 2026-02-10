@@ -2,28 +2,31 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const theme = {
+    background: '#fff4ec',
+    text: '#291425',
+    tabBar: '#291425',
+  };
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor:"#0b0b0b",
+          backgroundColor:"#291425",
           height: 75,
           paddingBottom: 10,
           paddingTop: 10,
-          borderTopColor:"202020",
+          borderTopColor:"#291425",
         },
         tabBarActiveTintColor:'#F5C542',
-        tabBarInactiveTintColor:'#8c8c8c',
+        tabBarInactiveTintColor:'#bd61A6',
         tabBarLabelStyle:{fontSize:12,},
         tabBarButton: HapticTab,
        
@@ -39,7 +42,7 @@ export default function TabLayout() {
         name="fildactualite"
         options={{
           title: 'Communaute',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="feed-outline" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
         }}
       />
       
