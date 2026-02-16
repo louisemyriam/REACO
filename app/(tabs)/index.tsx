@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,11 +9,17 @@ import {
   Pressable,
   Dimensions,
 } from 'react-native';
-
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 
-const BOOKS_NEW = [
+type Book = {
+  id: string;
+  title: string;
+  coverUrl: string;
+  badge?: string; // e.g. "NOUVEAUTÉ"
+};
+
+const BOOKS_NEW: Book[] = [
   {
     id: '1',
     title: 'Some Girls do',
@@ -23,84 +29,125 @@ const BOOKS_NEW = [
   {
     id: '2',
     title: 'La femme de ménage',
-    coverUrl:
-      'https://m.media-amazon.com/images/I/613H6840ArL.jpg',
+    coverUrl: 'https://m.media-amazon.com/images/I/613H6840ArL.jpg',
   },
   {
     id: '3',
     title: 'The Shining',
     coverUrl:
       'https://preview.redd.it/new-king-editions-v0-khd2lqh0mcld1.jpg?width=640&crop=smart&auto=webp&s=c87f91735c791bf93465dd0a378455da1f611221',
+    badge: 'NOUVEAUTÉ',
   },
   {
     id: '4',
-    title: 'It Ends With Us ',
+    title: 'It Ends With Us',
     coverUrl:
       'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
   },
-
 ];
 
-const BOOKS_RECO = [
+const BOOKS_FOR_YOU: Book[] = [
   {
-    id: '4',
+    id: '5',
     title: 'La femme de ménage voit tout',
     coverUrl:
       'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/25_9782290415634_1_75.jpg',
   },
   {
-    id: '5',
+    id: '6',
     title: 'Reminders of him',
     coverUrl:
       'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/3_9782755670790_1_75.jpg',
   },
   {
-    id: '6',
+    id: '7',
     title: 'La librairie morisaki',
     coverUrl:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTucWZWAzV9HBtl4h18XCa4iCw9xHCLGSSS6g&s',
   },
+];
+
+const BOOKS_FANTASY: Book[] = [
   {
-    id: '7',
-    title: 'Above all else',
+    id: '8',
+    title: 'Harry Potter',
     coverUrl:
-      'https://everychildareader.net/wp-content/uploads/2021/07/Charlesbridge_Above-All-Else.jpg',
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022l/3.jpg',
+  },
+  {
+    id: '9',
+    title: 'Anne of Green Gables',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
+  },
+  {
+    id: '10',
+    title: 'Blue is a darkness…',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1675643000l/75557739.jpg',
   },
 ];
 
-export default function CatalogueScreen() {
+const BOOKS_FRIENDS: Book[] = [
+  {
+    id: '11',
+    title: 'Et tombent les têtes',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1698004214l/199709804.jpg',
+  },
+  {
+    id: '12',
+    title: 'Légitime démence',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1691515262l/195910083.jpg',
+  },
+  {
+    id: '13',
+    title: 'Méfie-toi',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
+    badge: 'NOUVEAUTÉ',
+  },
+];
+
+export default function HomeScreen() {
   const [search, setSearch] = useState('');
 
   const screenW = Dimensions.get('window').width;
-  const gap = 12;
-  const gridItemW = Math.floor((screenW - 40 - gap) / 2); // padding 20 left + 20 right
-  const gridItemH = Math.floor(gridItemW * 1.45);
+  const heroW = Math.floor(screenW * 0.62);
+  const heroH = Math.floor(heroW * 1.45);
 
-  const horizontalW = 120;
-  const horizontalH = Math.floor(horizontalW * 1.45);
+  const smallW = 110;
+  const smallH = Math.floor(smallW * 1.45);
 
-  const newFiltered = BOOKS_NEW.filter((b) =>
-    b.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const filterBooks = (arr: Book[]) => {
+    const s = search.trim().toLowerCase();
+    if (!s) return arr;
+    return arr.filter((b) => b.title.toLowerCase().includes(s));
+  };
 
-  const recoFiltered = BOOKS_RECO.filter((b) =>
-    b.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const newFiltered = useMemo(() => filterBooks(BOOKS_NEW), [search]);
+  const forYouFiltered = useMemo(() => filterBooks(BOOKS_FOR_YOU), [search]);
+  const friendsFiltered = useMemo(() => filterBooks(BOOKS_FRIENDS), [search]);
+  const fantasyFiltered = useMemo(() => filterBooks(BOOKS_FANTASY), [search]);
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Main scroll is THIS FlatList */}
+      {/* One vertical scroll */}
       <FlatList
-        data={recoFiltered}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={{ gap }}
-        contentContainerStyle={styles.listContent}
+        data={[{ key: 'spacer' }]} // dummy
+        keyExtractor={(i) => i.key}
+        renderItem={() => null}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.page}
         ListHeaderComponent={
           <View>
-            <Text style={styles.title}>Accueil/ Catalogue</Text>
+            {/* Header */}
+            <View style={styles.header}>
+              <Text style={styles.bigTitle}>BIENVENUE</Text>
+            </View>
 
+            {/* Search */}
             <View style={styles.searchBox}>
               <TextInput
                 value={search}
@@ -112,6 +159,7 @@ export default function CatalogueScreen() {
               <Ionicons name="search" size={18} color="rgba(41,20,37,0.6)" />
             </View>
 
+            {/* NOUVEAUTÉS */}
             <Text style={styles.sectionTitle}>Nouveautés</Text>
 
             <FlatList
@@ -119,14 +167,40 @@ export default function CatalogueScreen() {
               showsHorizontalScrollIndicator={false}
               data={newFiltered}
               keyExtractor={(item) => item.id}
+              ItemSeparatorComponent={() => <View style={{ width: 14 }} />}
+              contentContainerStyle={{ paddingBottom: 6 }}
+              renderItem={({ item }) => (
+                <Pressable style={[styles.heroCard, { width: heroW, height: heroH }]}>
+                  <Image
+                    source={{ uri: item.coverUrl }}
+                    style={StyleSheet.absoluteFillObject}
+                    contentFit="cover"
+                  />
+                  {item.badge ? (
+                    <View style={styles.badge}>
+                      <Text style={styles.badgeText}>{item.badge}</Text>
+                    </View>
+                  ) : null}
+                </Pressable>
+              )}
+            />
+
+            {/* POUR VOUS */}
+            <View style={styles.rowTitle}>
+              <Text style={styles.sectionTitle}>Pour vous</Text>
+              <Pressable>
+                <Text style={styles.seeMore}>Voir tout</Text>
+              </Pressable>
+            </View>
+
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={forYouFiltered}
+              keyExtractor={(item) => item.id}
               ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
               renderItem={({ item }) => (
-                <Pressable
-                  style={[
-                    styles.bookCard,
-                    { width: horizontalW, height: horizontalH },
-                  ]}
-                >
+                <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
                   <Image
                     source={{ uri: item.coverUrl }}
                     style={StyleSheet.absoluteFillObject}
@@ -136,50 +210,109 @@ export default function CatalogueScreen() {
               )}
             />
 
-            <Text style={styles.sectionTitle}>Recommandé pour vous</Text>
+            {/* LIVRES DU MOMENT (card) */}
+            <View style={styles.momentCard}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.momentTitle}>LIVRES DU MOMENT</Text>
+                <Text style={styles.momentText}>
+                  Découvrez Conte de fées, par Stephen King
+                </Text>
+              </View>
+
+              <View style={styles.momentCover}>
+                <Image
+                  source={{
+                    uri: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
+                  }}
+                  style={StyleSheet.absoluteFillObject}
+                  contentFit="cover"
+                />
+                <View style={styles.badgeRed}>
+                  <Text style={styles.badgeRedText}>NOUVEAUTÉ</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* VOS AMIS AIMENT */}
+            <Text style={styles.sectionTitle}>Vos amis aiment</Text>
+
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={friendsFiltered}
+              keyExtractor={(item) => item.id}
+              ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+              renderItem={({ item }) => (
+                <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
+                  <Image
+                    source={{ uri: item.coverUrl }}
+                    style={StyleSheet.absoluteFillObject}
+                    contentFit="cover"
+                  />
+                  {item.badge ? (
+                    <View style={styles.badgeMini}>
+                      <Text style={styles.badgeMiniText}>{item.badge}</Text>
+                    </View>
+                  ) : null}
+                </Pressable>
+              )}
+            />
+
+            {/* FANTASY */}
+            <Text style={styles.sectionTitle}>Fantasy</Text>
+
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={fantasyFiltered}
+              keyExtractor={(item) => item.id}
+              ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+              contentContainerStyle={{ paddingBottom: 22 }}
+              renderItem={({ item }) => (
+                <View style={{ width: smallW }}>
+                  <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
+                    <Image
+                      source={{ uri: item.coverUrl }}
+                      style={StyleSheet.absoluteFillObject}
+                      contentFit="cover"
+                    />
+                  </Pressable>
+                  <Text style={styles.bookCaption} numberOfLines={2}>
+                    {item.title}
+                  </Text>
+                </View>
+              )}
+            />
           </View>
         }
-        renderItem={({ item }) => (
-          <View style={{ marginBottom: 12 }}>
-            <Pressable
-              style={[
-                styles.bookCard,
-                { width: gridItemW, height: gridItemH },
-              ]}
-            >
-              <Image
-                source={{ uri: item.coverUrl }}
-                style={StyleSheet.absoluteFillObject}
-                contentFit="cover"
-              />
-            </Pressable>
-          </View>
-        )}
       />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: '#FFF4EC',
+  safe: { flex: 1, backgroundColor: '#FEF1EA' },
+  page: {
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    paddingBottom: 20,
   },
-  listContent: {
-    paddingHorizontal: 20,
-    paddingTop: 14,
-    paddingBottom: 18,
+
+  header: {
+    marginTop: 4,
+    marginBottom: 10,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: '800',
+  bigTitle: {
+    fontSize: 40,
+    fontWeight: '900',
     color: '#291425',
-    marginBottom: 12,
+    letterSpacing: 1,
   },
+
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -192,19 +325,128 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#291425',
     marginRight: 10,
+    fontWeight: '700',
   },
+
   sectionTitle: {
-    marginTop: 12,
-    marginBottom: 8,
+    marginTop: 14,
+    marginBottom: 10,
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: '900',
     color: '#291425',
   },
-  bookCard: {
+
+  rowTitle: {
+    marginTop: 8,
+    marginBottom: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  seeMore: {
+    color: '#BD61A6',
+    fontWeight: '900',
+  },
+
+  heroCard: {
     borderRadius: 18,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.08)',
+  },
+
+  smallCard: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+  },
+
+  badge: {
+    position: 'absolute',
+    left: 12,
+    bottom: 12,
+    backgroundColor: 'rgba(255,255,255,0.88)',
+    borderRadius: 999,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  badgeText: {
+    fontWeight: '900',
+    color: '#291425',
+    fontSize: 12,
+  },
+
+  momentCard: {
+    marginTop: 16,
+    borderRadius: 18,
+    padding: 14,
+    backgroundColor: 'rgba(252,176,64,0.20)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'center',
+  },
+  momentTitle: {
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#291425',
+    marginBottom: 6,
+  },
+  momentText: {
+    fontSize: 13,
+    color: 'rgba(41,20,37,0.75)',
+    fontWeight: '700',
+    lineHeight: 18,
+  },
+  momentCover: {
+    width: 92,
+    height: 128,
+    borderRadius: 14,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+  },
+  badgeRed: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    backgroundColor: '#E53935',
+    borderRadius: 999,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  badgeRedText: {
+    color: '#FFFFFF',
+    fontWeight: '900',
+    fontSize: 10,
+  },
+
+  badgeMini: {
+    position: 'absolute',
+    left: 8,
+    bottom: 8,
+    backgroundColor: 'rgba(255,255,255,0.88)',
+    borderRadius: 999,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  badgeMiniText: {
+    fontWeight: '900',
+    color: '#291425',
+    fontSize: 10,
+  },
+
+  bookCaption: {
+    marginTop: 8,
+    fontSize: 12,
+    color: '#291425',
+    fontWeight: '900',
   },
 });

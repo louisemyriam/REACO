@@ -9,10 +9,10 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Modal,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-
 
 type Post = {
   id: string;
@@ -21,6 +21,28 @@ type Post = {
   imageUrl?: string;
   liked: boolean;
   likes: number;
+};
+
+type Creator = {
+  pseudo: string;
+  avatarUrl: string;
+};
+
+type ClubRoom = {
+  id: string;
+  name: string;
+  desc: string;
+};
+
+type BookClub = {
+  id: string;
+  title: string;
+  coverUrl: string;
+  members: number;
+  activity: string;
+  genres: string[];
+  creator: Creator;
+  rooms: ClubRoom[];
 };
 
 const START_POSTS: Post[] = [
@@ -43,20 +65,132 @@ const START_POSTS: Post[] = [
   },
 ];
 
+const CLUBS: BookClub[] = [
+  {
+    id: 'c1',
+    title: 'Soft Book Club',
+    coverUrl:
+      'https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    members: 128,
+    activity: 'Actif aujourd’hui',
+    genres: ['Cozy', 'Feel-good', 'Romance'],
+    creator: {
+      pseudo: 'mimi_reads',
+      avatarUrl:
+        'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
+    rooms: [
+      { id: 'r1', name: 'Lobby', desc: 'Discussions générales' },
+      { id: 'r2', name: 'Intros', desc: 'Présente-toi au club' },
+      { id: 'r3', name: 'Recommandations', desc: 'Les livres doux du moment' },
+    ],
+  },
+  {
+    id: 'c2',
+    title: 'Les folles du Dark',
+    coverUrl:
+      'https://images.pexels.com/photos/1053687/pexels-photo-1053687.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    members: 342,
+    activity: 'Très actif',
+    genres: ['Dark romance', 'Thriller', 'Spicy'],
+    creator: {
+      pseudo: 'noir_queen',
+      avatarUrl:
+        'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
+    rooms: [
+      { id: 'r1', name: 'Lobby', desc: 'On discute sans filtre' },
+      { id: 'r2', name: 'Warnings', desc: 'TW / limites / règles' },
+      { id: 'r3', name: 'Lectures du mois', desc: 'Choix & votes' },
+    ],
+  },
+  {
+    id: 'c3',
+    title: 'Le Cosy Bookclub',
+    coverUrl:
+      'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    members: 205,
+    activity: 'Actif cette semaine',
+    genres: ['Cozy mystery', 'Slice of life', 'Classiques'],
+    creator: {
+      pseudo: 'tea.and.pages',
+      avatarUrl:
+        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
+    rooms: [
+      { id: 'r1', name: 'Lobby', desc: 'Thé, plaids, chapitres' },
+      { id: 'r2', name: 'Spoilers', desc: 'Zone spoilers' },
+      { id: 'r3', name: 'Cosy recos', desc: 'Idées lectures cocoon' },
+    ],
+  },
+  {
+    id: 'c4',
+    title: 'Colleen Hoover',
+    coverUrl:
+      'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    members: 511,
+    activity: 'Actif maintenant',
+    genres: ['Romance', 'Drama', 'New Adult'],
+    creator: {
+      pseudo: 'coho_addict',
+      avatarUrl:
+        'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
+    rooms: [
+      { id: 'r1', name: 'Lobby', desc: 'Tout CoHo' },
+      { id: 'r2', name: 'Lectures en cours', desc: 'Avancement par chapitre' },
+      { id: 'r3', name: 'Hot takes', desc: 'Débats & opinions' },
+    ],
+  },
+  {
+    id: 'c5',
+    title: 'Love & Drama',
+    coverUrl:
+      'https://images.pexels.com/photos/1301585/pexels-photo-1301585.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    members: 274,
+    activity: 'Actif aujourd’hui',
+    genres: ['Romance', 'Drama', 'Enemies to lovers'],
+    creator: {
+      pseudo: 'drama_reader',
+      avatarUrl:
+        'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300',
+    },
+    rooms: [
+      { id: 'r1', name: 'Lobby', desc: 'Bienvenue' },
+      { id: 'r2', name: 'Intros', desc: 'Présente-toi' },
+      { id: 'r3', name: 'Recos', desc: 'Les meilleurs dramas' },
+      { id: 'r4', name: 'Spoilers', desc: 'Zone spoilers' },
+    ],
+  },
+];
+
 export default function FilActualiteScreen() {
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState<'feed' | 'club'>('feed');
 
+  // FEED
   const [text, setText] = useState('');
   const [posts, setPosts] = useState<Post[]>(START_POSTS);
 
-  const filtered = useMemo(() => {
+  // CLUB
+  const [selectedClub, setSelectedClub] = useState<BookClub | null>(null);
+  const [joinedClubIds, setJoinedClubIds] = useState<Record<string, boolean>>({});
+
+  const filteredPosts = useMemo(() => {
     const s = search.trim().toLowerCase();
     if (!s) return posts;
     return posts.filter((p) =>
       (p.user + ' ' + p.content).toLowerCase().includes(s)
     );
   }, [posts, search]);
+
+  const filteredClubs = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    if (!s) return CLUBS;
+    return CLUBS.filter((c) =>
+      (c.title + ' ' + c.genres.join(' ')).toLowerCase().includes(s)
+    );
+  }, [search]);
 
   const publish = () => {
     const value = text.trim();
@@ -74,7 +208,7 @@ export default function FilActualiteScreen() {
     setText('');
   };
 
-  const toggleLike = (id: string) => {
+  const togglePostLike = (id: string) => {
     setPosts((prev) =>
       prev.map((p) => {
         if (p.id !== id) return p;
@@ -88,8 +222,12 @@ export default function FilActualiteScreen() {
     );
   };
 
-  // IMPORTANT: now FlatList is the main scroll,
-  // and the header (search + tabs + composer) is inside ListHeaderComponent.
+  const joinClub = (clubId: string) => {
+    setJoinedClubIds((prev) => ({ ...prev, [clubId]: true }));
+  };
+
+  const data = tab === 'feed' ? filteredPosts : filteredClubs;
+
   return (
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView
@@ -99,8 +237,8 @@ export default function FilActualiteScreen() {
         <FlatList
           style={{ flex: 1 }}
           contentContainerStyle={styles.listContent}
-          data={tab === 'feed' ? filtered : []}
-          keyExtractor={(item) => item.id}
+          data={data as any}
+          keyExtractor={(item: any) => item.id}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           ListHeaderComponent={
@@ -158,106 +296,226 @@ export default function FilActualiteScreen() {
                 </Pressable>
               </View>
 
-              {/* Composer */}
-              <View style={styles.composer}>
-                <TextInput
-                  value={text}
-                  onChangeText={setText}
-                  placeholder="Partagez vos réflexions sur votre lecture..."
-                  placeholderTextColor="rgba(41,20,37,0.55)"
-                  multiline
-                  style={styles.composerInput}
-                />
-                <Pressable onPress={publish} style={styles.publishBtn}>
-                  <Text style={styles.publishText}>Publier</Text>
-                </Pressable>
-              </View>
-
-              {/* If club is selected, show a message (and no posts) */}
-              {tab === 'club' ? (
-                <View style={styles.empty}>
-                  <Text style={styles.emptyTitle}>Club</Text>
-                  <Text style={styles.emptyText}>
-                    On branchera la logique Club plus tard. L’UI est prête.
-                  </Text>
+              {/* Composer only on feed */}
+              {tab === 'feed' ? (
+                <View style={styles.composer}>
+                  <TextInput
+                    value={text}
+                    onChangeText={setText}
+                    placeholder="Partagez vos réflexions sur votre lecture..."
+                    placeholderTextColor="rgba(41,20,37,0.55)"
+                    multiline
+                    style={styles.composerInput}
+                  />
+                  <Pressable onPress={publish} style={styles.publishBtn}>
+                    <Text style={styles.publishText}>Publier</Text>
+                  </Pressable>
                 </View>
               ) : null}
             </View>
           }
           ListEmptyComponent={
-            tab === 'feed' ? (
-              <View style={styles.empty}>
-                <Text style={styles.emptyTitle}>Aucun post</Text>
-                <Text style={styles.emptyText}>
-                  Essayez une autre recherche ou publiez un message.
-                </Text>
-              </View>
-            ) : null
+            <View style={styles.empty}>
+              <Text style={styles.emptyTitle}>
+                {tab === 'feed' ? 'Aucun post' : 'Aucun club'}
+              </Text>
+              <Text style={styles.emptyText}>
+                {tab === 'feed'
+                  ? 'Essayez une autre recherche ou publiez un message.'
+                  : 'Essayez une autre recherche.'}
+              </Text>
+            </View>
           }
-          renderItem={({ item }) => (
-            <View style={styles.postCard}>
-              <Text style={styles.user}>{item.user}</Text>
-              <Text style={styles.content}>{item.content}</Text>
+          renderItem={({ item }: any) => {
+            if (tab === 'feed') {
+              const p = item as Post;
+              return (
+                <View style={styles.postCard}>
+                  <Text style={styles.user}>{p.user}</Text>
+                  <Text style={styles.content}>{p.content}</Text>
 
-              {item.imageUrl ? (
-                <View style={styles.postImage}>
+                  {p.imageUrl ? (
+                    <View style={styles.postImage}>
+                      <Image
+                        source={{ uri: p.imageUrl }}
+                        style={StyleSheet.absoluteFillObject}
+                        contentFit="cover"
+                      />
+                    </View>
+                  ) : null}
+
+                  <View style={styles.actions}>
+                    <Pressable
+                      onPress={() => togglePostLike(p.id)}
+                      style={styles.actionBtn}
+                    >
+                      <Ionicons
+                        name={p.liked ? 'heart' : 'heart-outline'}
+                        size={18}
+                        color={p.liked ? '#BD61A6' : 'rgba(41,20,37,0.65)'}
+                      />
+                      <Text style={styles.actionText}>{p.likes}</Text>
+                    </Pressable>
+
+                    <Pressable style={styles.actionBtn}>
+                      <Ionicons
+                        name="chatbubble-outline"
+                        size={18}
+                        color="rgba(41,20,37,0.65)"
+                      />
+                      <Text style={styles.actionText}>Commenter</Text>
+                    </Pressable>
+
+                    <Pressable style={styles.actionBtn}>
+                      <Ionicons
+                        name="paper-plane-outline"
+                        size={18}
+                        color="rgba(41,20,37,0.65)"
+                      />
+                      <Text style={styles.actionText}>Partager</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              );
+            }
+
+            // CLUB CARD
+            const c = item as BookClub;
+            return (
+              <Pressable
+                style={styles.clubCard}
+                onPress={() => setSelectedClub(c)}
+              >
+                {/* Cover */}
+                <View style={styles.clubCover}>
                   <Image
-                    source={{ uri: item.imageUrl }}
+                    source={{ uri: c.coverUrl }}
                     style={StyleSheet.absoluteFillObject}
                     contentFit="cover"
                   />
                 </View>
-              ) : null}
 
-              <View style={styles.actions}>
-                <Pressable
-                  onPress={() => toggleLike(item.id)}
-                  style={styles.actionBtn}
-                >
-                  <Ionicons
-                    name={item.liked ? 'heart' : 'heart-outline'}
-                    size={18}
-                    color={item.liked ? '#BD61A6' : 'rgba(41,20,37,0.65)'}
-                  />
-                  <Text style={styles.actionText}>{item.likes}</Text>
-                </Pressable>
+                {/* Row: avatar + title + members */}
+                <View style={styles.clubInfoRow}>
+                  <Image source={{ uri: c.creator.avatarUrl }} style={styles.avatar} />
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.clubTitle} numberOfLines={1}>
+                      {c.title}
+                    </Text>
+                    <Text style={styles.clubMeta} numberOfLines={1}>
+                      @{c.creator.pseudo} • {c.activity}
+                    </Text>
+                  </View>
 
-                <Pressable style={styles.actionBtn}>
-                  <Ionicons
-                    name="chatbubble-outline"
-                    size={18}
-                    color="rgba(41,20,37,0.65)"
-                  />
-                  <Text style={styles.actionText}>Commenter</Text>
-                </Pressable>
-
-                <Pressable style={styles.actionBtn}>
-                  <Ionicons
-                    name="paper-plane-outline"
-                    size={18}
-                    color="rgba(41,20,37,0.65)"
-                  />
-                  <Text style={styles.actionText}>Partager</Text>
-                </Pressable>
-              </View>
-            </View>
-          )}
+                  <View style={styles.membersPill}>
+                    <Ionicons name="people" size={14} color="rgba(41,20,37,0.7)" />
+                    <Text style={styles.membersText}>{c.members}</Text>
+                  </View>
+                </View>
+              </Pressable>
+            );
+          }}
         />
+
+        {/* POPUP / MODAL */}
+        <Modal
+          visible={!!selectedClub}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setSelectedClub(null)}
+        >
+          <View style={styles.modalBackdrop}>
+            <View style={styles.modalCard}>
+              {/* close */}
+              <Pressable style={styles.modalClose} onPress={() => setSelectedClub(null)}>
+                <Ionicons name="close" size={18} color="rgba(41,20,37,0.75)" />
+              </Pressable>
+
+              {selectedClub ? (
+                <>
+                  {/* cover */}
+                  <View style={styles.modalCover}>
+                    <Image
+                      source={{ uri: selectedClub.coverUrl }}
+                      style={StyleSheet.absoluteFillObject}
+                      contentFit="cover"
+                    />
+                  </View>
+
+                  {/* title */}
+                  <Text style={styles.modalTitle}>{selectedClub.title}</Text>
+
+                  {/* creator + join + members */}
+                  <View style={styles.modalTopRow}>
+                    <View style={styles.creatorRow}>
+                      <Image source={{ uri: selectedClub.creator.avatarUrl }} style={styles.avatarSmall} />
+                      <Text style={styles.creatorText}>@{selectedClub.creator.pseudo}</Text>
+                    </View>
+
+                    <View style={styles.joinRow}>
+                      <Pressable
+                        onPress={() => joinClub(selectedClub.id)}
+                        style={[
+                          styles.joinBtn,
+                          joinedClubIds[selectedClub.id] ? styles.joinBtnDone : null,
+                        ]}
+                      >
+                        <Text style={styles.joinText}>
+                          {joinedClubIds[selectedClub.id] ? 'Membre' : 'Join'}
+                        </Text>
+                      </Pressable>
+
+                      <View style={styles.membersPillSmall}>
+                        <Ionicons name="people" size={14} color="rgba(41,20,37,0.7)" />
+                        <Text style={styles.membersText}>{selectedClub.members}</Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* activity + genres */}
+                  <Text style={styles.modalMeta}>
+                    {selectedClub.activity}
+                  </Text>
+
+                  <View style={styles.genreRow}>
+                    {selectedClub.genres.map((g) => (
+                      <View key={g} style={styles.genrePill}>
+                        <Text style={styles.genreText}>{g}</Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* rooms */}
+                  <Text style={styles.roomsTitle}>Chat rooms</Text>
+
+                  <View style={{ gap: 10 }}>
+                    {selectedClub.rooms.map((r) => (
+                      <Pressable key={r.id} style={styles.roomItem}>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.roomName}>#{r.name}</Text>
+                          <Text style={styles.roomDesc}>{r.desc}</Text>
+                        </View>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={16}
+                          color="rgba(41,20,37,0.45)"
+                        />
+                      </Pressable>
+                    ))}
+                  </View>
+                </>
+              ) : null}
+            </View>
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: '#FFF4EC',
-  },
-  listContent: {
-    paddingHorizontal: 20,
-    paddingTop: 14,
-    paddingBottom: 18,
-  },
+  safe: { flex: 1, backgroundColor: '#FFF4EC' },
+  listContent: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 18 },
 
   searchBox: {
     flexDirection: 'row',
@@ -277,11 +535,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 
-  segmentRow: {
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 12,
-  },
+  segmentRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
   segmentBtn: {
     flex: 1,
     paddingVertical: 10,
@@ -298,16 +552,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.75)',
     borderColor: 'rgba(41,20,37,0.10)',
   },
-  segmentText: {
-    fontSize: 13,
-    fontWeight: '800',
-  },
-  segmentTextActive: {
-    color: '#291425',
-  },
-  segmentTextInactive: {
-    color: 'rgba(41,20,37,0.65)',
-  },
+  segmentText: { fontSize: 13, fontWeight: '800' },
+  segmentTextActive: { color: '#291425' },
+  segmentTextInactive: { color: 'rgba(41,20,37,0.65)' },
 
   composer: {
     backgroundColor: '#FFFFFF',
@@ -332,11 +579,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 14,
   },
-  publishText: {
-    fontSize: 13,
-    fontWeight: '900',
-    color: '#291425',
-  },
+  publishText: { fontSize: 13, fontWeight: '900', color: '#291425' },
 
   postCard: {
     backgroundColor: '#FFFFFF',
@@ -365,12 +608,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF4EC',
     marginBottom: 10,
   },
-
-  actions: {
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'center',
-  },
+  actions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
   actionBtn: {
     flexDirection: 'row',
     gap: 6,
@@ -388,6 +626,60 @@ const styles = StyleSheet.create({
     color: 'rgba(41,20,37,0.65)',
   },
 
+  // CLUB CARD
+  clubCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 22,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  clubCover: {
+    width: '100%',
+    height: 220,
+    borderRadius: 18,
+    overflow: 'hidden',
+    backgroundColor: '#FFF4EC',
+  },
+  clubInfoRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  avatar: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: '#FFF4EC',
+  },
+  clubTitle: {
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#291425',
+  },
+  clubMeta: {
+    marginTop: 2,
+    fontSize: 12,
+    color: 'rgba(41,20,37,0.60)',
+  },
+  membersPill: {
+    flexDirection: 'row',
+    gap: 6,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,244,236,0.90)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.06)',
+  },
+  membersText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: 'rgba(41,20,37,0.70)',
+  },
+
   empty: {
     backgroundColor: '#FFFFFF',
     borderRadius: 22,
@@ -402,9 +694,147 @@ const styles = StyleSheet.create({
     color: '#291425',
     marginBottom: 6,
   },
-  emptyText: {
+  emptyText: { fontSize: 13, color: 'rgba(41,20,37,0.65)', lineHeight: 18 },
+
+  // MODAL
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(41,20,37,0.45)',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    backgroundColor: '#FFF4EC',
+    borderRadius: 22,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  modalClose: {
+    alignSelf: 'flex-end',
+    padding: 8,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+  },
+  modalCover: {
+    width: '100%',
+    height: 180,
+    borderRadius: 18,
+    overflow: 'hidden',
+    backgroundColor: '#FFFFFF',
+    marginTop: 8,
+  },
+  modalTitle: {
+    marginTop: 12,
+    fontSize: 18,
+    fontWeight: '900',
+    color: '#291425',
+  },
+  modalTopRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  creatorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  avatarSmall: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#FFFFFF',
+  },
+  creatorText: {
     fontSize: 13,
+    fontWeight: '800',
+    color: 'rgba(41,20,37,0.75)',
+  },
+  joinRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  joinBtn: {
+    backgroundColor: '#FBB040',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 14,
+  },
+  joinBtnDone: {
+    backgroundColor: '#BD61A6',
+  },
+  joinText: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: '#291425',
+  },
+  membersPillSmall: {
+    flexDirection: 'row',
+    gap: 6,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+  },
+  modalMeta: {
+    marginTop: 10,
+    fontSize: 13,
+    fontWeight: '700',
     color: 'rgba(41,20,37,0.65)',
-    lineHeight: 18,
+  },
+  genreRow: {
+    marginTop: 8,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  genrePill: {
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  genreText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'rgba(41,20,37,0.70)',
+  },
+  roomsTitle: {
+    marginTop: 14,
+    marginBottom: 10,
+    fontSize: 14,
+    fontWeight: '900',
+    color: '#291425',
+  },
+  roomItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  roomName: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: '#291425',
+  },
+  roomDesc: {
+    marginTop: 2,
+    fontSize: 12,
+    color: 'rgba(41,20,37,0.60)',
   },
 });
