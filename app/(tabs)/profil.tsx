@@ -7,7 +7,7 @@ import { WeeklyProgress } from '@/components/WeeklyProgress';
 import { Ionicons } from '@expo/vector-icons';
 import { Href, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Profile() {
   const [profile] = useState({
@@ -33,35 +33,17 @@ export default function Profile() {
     router.push('/creerobjectif' as Href);
   };
 
+  
+
   <View style={styles.goalsContainer}>
   <TouchableOpacity
     style={styles.goalCard}
-    onPress={() => router.push('/objectif' as Href)}
-  >
-    <ImageBackground
-      source={{ uri: 'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg' }}
-      style={styles.goalImage}
-      imageStyle={styles.goalImageStyle}
-    >
-      <View style={styles.goalOverlay}>
-        <Text style={styles.goalText}>📖 20 min / jour</Text>
-      </View>
-    </ImageBackground>
+    onPress={() => router.push('/objectif' as Href)}>
   </TouchableOpacity>
 
   <TouchableOpacity
     style={styles.goalCard}
-    onPress={() => router.push('/objectif' as Href)}
-  >
-    <ImageBackground
-      source={{ uri: 'https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg' }}
-      style={styles.goalImage}
-      imageStyle={styles.goalImageStyle}
-    >
-      <View style={styles.goalOverlay}>
-        <Text style={styles.goalText}>📚 2 livres / mois</Text>
-      </View>
-    </ImageBackground>
+    onPress={() => router.push('/objectif' as Href)}>
   </TouchableOpacity>
 
   <View style={styles.goalContainer}>
@@ -200,8 +182,9 @@ export default function Profile() {
         fullName={profile.fullName}
         username={profile.username}
         bio={profile.bio}
-        onEditPress={handleEditProfile}
+        onEditPress={() => router.push('/parametres' as Href)}
       />
+    
 
       <SocialStats
         followersCount={142}
@@ -263,6 +246,15 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  topBar: {
+    paddingTop: 55,
+    paddingHorizontal: 16,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
     backgroundColor: '#F9FAFB',
   },
   goalsRow: {
