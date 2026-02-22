@@ -4,14 +4,16 @@ import { ProfileHeader } from '@/components/ProfilHeader';
 import { RecentActivity } from '@/components/RecentActivity';
 import { SocialStats } from '@/components/SocialStats';
 import { WeeklyProgress } from '@/components/WeeklyProgress';
+import { Ionicons } from '@expo/vector-icons';
+import { Href, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function Profile() {
   const [profile] = useState({
     id: '1',
     username: 'lecteur_zen',
-    fullName: 'Lea Dubois',
+    fullName: 'Marie Dubois',
     avatarUrl: '',
     bio: 'En pleine lecture de fantasy ✨',
     readingLevel: 5,
@@ -22,6 +24,53 @@ export default function Profile() {
     profileVisibility: 'public',
     showStats: true,
   });
+
+  const router = useRouter();
+  const handleGoalPress = () => {
+    router.push('/objectif' as Href);
+  };
+  const handleCreateGoalPress = () => {
+    router.push('/creerobjectif' as Href);
+  };
+
+  <View style={styles.goalsContainer}>
+  <TouchableOpacity
+    style={styles.goalCard}
+    onPress={() => router.push('/objectif' as Href)}
+  >
+    <ImageBackground
+      source={{ uri: 'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg' }}
+      style={styles.goalImage}
+      imageStyle={styles.goalImageStyle}
+    >
+      <View style={styles.goalOverlay}>
+        <Text style={styles.goalText}>📖 20 min / jour</Text>
+      </View>
+    </ImageBackground>
+  </TouchableOpacity>
+
+  <TouchableOpacity
+    style={styles.goalCard}
+    onPress={() => router.push('/objectif' as Href)}
+  >
+    <ImageBackground
+      source={{ uri: 'https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg' }}
+      style={styles.goalImage}
+      imageStyle={styles.goalImageStyle}
+    >
+      <View style={styles.goalOverlay}>
+        <Text style={styles.goalText}>📚 2 livres / mois</Text>
+      </View>
+    </ImageBackground>
+  </TouchableOpacity>
+
+  <View style={styles.goalContainer}>
+  <TouchableOpacity style={styles.goalButton} onPress={handleCreateGoalPress}>
+    <Ionicons size={24} name="add-outline" color="#FFFFFF" />
+  </TouchableOpacity>
+</View>
+
+</View>
 
   const [badges] = useState([
     {
@@ -160,6 +209,26 @@ export default function Profile() {
         clubsCount={3}
         onSharePress={handleShareProfile}
       />
+      <View style={styles.goalsRow}>
+        <View style={styles.goalContainer}>
+        <TouchableOpacity style={styles.goalButton} onPress={handleGoalPress}>
+        <Text style={styles.goalButtonText}>Mon objectif 1</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.goalContainer}>
+        <TouchableOpacity style={styles.goalButton} onPress={handleGoalPress}>
+        <Text style={styles.goalButtonText}>Mon objectif 2</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.goalContainer}>
+        <TouchableOpacity style={styles.goalButton} onPress={handleGoalPress}>
+        <View> <Ionicons size={24} name="add-outline"/></View>
+        </TouchableOpacity>
+      </View>
+      </View>
+      
 
       {profile.showStats && (
         <>
@@ -178,7 +247,7 @@ export default function Profile() {
         showProgress={true}
       />
 
-      <BookLibrary title="📚 Wishlist " books={toRead} />
+      <BookLibrary title="📚 À lire plus tard" books={toRead} />
 
       <BookLibrary title="✅ Livres terminés" books={completed} />
 
@@ -194,16 +263,62 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF4EC', // same as your other screens
-    paddingTop: 14,            // optional: to match spacing
+    backgroundColor: '#F9FAFB',
+  },
+  goalsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start', // aligne à gauche
+    paddingHorizontal: 12,
+    marginTop: 20,
+  },
+  goalContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  },
+  goalButton: {
+    backgroundColor: '#BD61A6',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  goalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  goalsContainer: {
+    paddingHorizontal: 16,
+    marginTop: 16,
+    gap: 16,
+  },
+  goalCard: {
+    height: 140,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  goalImage: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  goalImageStyle: {
+    borderRadius: 20,
+  },
+  goalOverlay: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 16,
+  },
+  goalText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '700',
   },
   divider: {
-    height: 10,
-    backgroundColor: 'rgba(41,20,37,0.06)', // warm subtle separator (not grey)
-    marginVertical: 14,
+    height: 8,
+    backgroundColor: '#F3F4F6',
+    marginVertical: 8,
   },
   bottomSpace: {
     height: 40,
   },
 });
-

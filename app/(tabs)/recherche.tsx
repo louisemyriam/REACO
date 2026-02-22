@@ -277,7 +277,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    
   },
 
   // corners like scan frame

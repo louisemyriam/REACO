@@ -17,6 +17,9 @@ export default function RootLayout() {
         {/* TABS */}
         <Stack.Screen name="(tabs)" />
 
+        {/* OBJECTIF */}
+        <Stack.Screen name="objectif" />
+
         {/* MODAL (keep it) */}
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>

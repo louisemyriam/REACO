@@ -19,11 +19,11 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor:"#291425",
+          backgroundColor:"rgba(254, 246, 239, 0.9)",
           height: 75,
           paddingBottom: 10,
           paddingTop: 10,
-          borderTopColor:"#291425",
+
         },
         tabBarActiveTintColor:'#F5C542',
         tabBarInactiveTintColor:'#bd61A6',
@@ -31,6 +31,7 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
        
       }}>
+      
       <Tabs.Screen
         name="index"
         options={{
@@ -38,6 +39,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons size={28} name="home-outline" color={color} />,
         }}
       />
+
+      <Tabs.Screen
+        name="recherche"
+        options={{
+          title: 'recherche',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="search-outline" color={color} />,
+        }}
+      />
+      
       <Tabs.Screen
         name="fildactualite"
         options={{
@@ -61,7 +71,9 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
         }}
       />
-  
+      
+    
     </Tabs>
+    
   );
 }
