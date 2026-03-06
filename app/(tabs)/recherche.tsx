@@ -123,26 +123,6 @@ export default function BibliothequeScreen() {
               <Text style={styles.filtersText}>Filtres</Text>
             </Pressable>
 
-            {/* Title */}
-            <Text style={styles.h1}>Ajoutez vos livres</Text>
-
-            {/* Add/Scan box */}
-            <Pressable
-              style={styles.scanBox}
-              onPress={() => {
-                // later: open camera / barcode scan
-              }}
-            >
-              <View style={styles.scanCornerTL} />
-              <View style={styles.scanCornerTR} />
-              <View style={styles.scanCornerBL} />
-              <View style={styles.scanCornerBR} />
-
-              <View style={styles.scanIconWrap}>
-                <Ionicons name="camera-outline" size={22} color="#FBB040" />
-              </View>
-            </Pressable>
-
             {/* Section: Vos lectures */}
             <Text style={styles.sectionTitle}>Vos lectures</Text>
           </View>

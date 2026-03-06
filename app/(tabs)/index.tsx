@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +8,8 @@ import {
   FlatList,
   Pressable,
   Dimensions,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +18,7 @@ type Book = {
   id: string;
   title: string;
   coverUrl: string;
-  badge?: string; // e.g. "NOUVEAUTÉ"
+  badge?: string;
 };
 
 const BOOKS_NEW: Book[] = [
@@ -67,24 +69,25 @@ const BOOKS_FOR_YOU: Book[] = [
   },
 ];
 
-const BOOKS_FANTASY: Book[] = [
+const BOOKS_MOMENT: Book[] = [
   {
-    id: '8',
-    title: 'Harry Potter',
+    id: 'm1',
+    title: 'Conte de fées',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022l/3.jpg',
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
+    badge: 'NOUVEAUTÉ',
   },
   {
-    id: '9',
-    title: 'Anne of Green Gables',
+    id: 'm2',
+    title: 'La librairie des chats noirs',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1689174608l/182484156.jpg',
   },
   {
-    id: '10',
-    title: 'Blue is a darkness…',
+    id: 'm3',
+    title: 'Méfie-toi',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1675643000l/75557739.jpg',
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
   },
 ];
 
@@ -110,15 +113,47 @@ const BOOKS_FRIENDS: Book[] = [
   },
 ];
 
+const BOOKS_FANTASY: Book[] = [
+  {
+    id: '8',
+    title: 'Harry Potter',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022l/3.jpg',
+  },
+  {
+    id: '9',
+    title: 'Anne of Green Gables',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
+  },
+  {
+    id: '10',
+    title: 'Blue is a darkness…',
+    coverUrl:
+      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1675643000l/75557739.jpg',
+  },
+];
+
 export default function HomeScreen() {
   const [search, setSearch] = useState('');
 
   const screenW = Dimensions.get('window').width;
-  const heroW = Math.floor(screenW * 0.62);
-  const heroH = Math.floor(heroW * 1.45);
 
-  const smallW = 110;
+  // --- Sizes proches maquette ---
+  const heroItemW = Math.floor(screenW * 0.55); // gros livre (pas énorme)
+  const heroItemH = Math.floor(heroItemW * 1.45);
+  const heroSideSpace = Math.floor((screenW - heroItemW) / 2);
+
+  const smallW = 105;
   const smallH = Math.floor(smallW * 1.45);
+
+  // Livres du moment (carrousel + flèches)
+  const momentItemW = Math.floor(screenW * 0.78);
+  const momentItemH = Math.floor(momentItemW * 0.42);
+  const momentSideSpace = Math.floor((screenW - momentItemW) / 2);
+
+  const momentRef = useRef<FlatList<Book>>(null);
+  const [momentIndex, setMomentIndex] = useState(0);
 
   const filterBooks = (arr: Book[]) => {
     const s = search.trim().toLowerCase();
@@ -131,19 +166,35 @@ export default function HomeScreen() {
   const friendsFiltered = useMemo(() => filterBooks(BOOKS_FRIENDS), [search]);
   const fantasyFiltered = useMemo(() => filterBooks(BOOKS_FANTASY), [search]);
 
+  const onMomentScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const x = e.nativeEvent.contentOffset.x;
+    const idx = Math.round(x / momentItemW);
+    setMomentIndex(Math.max(0, Math.min(idx, BOOKS_MOMENT.length - 1)));
+  };
+
+  const goMoment = (dir: -1 | 1) => {
+    const next = Math.max(0, Math.min(momentIndex + dir, BOOKS_MOMENT.length - 1));
+    setMomentIndex(next);
+    momentRef.current?.scrollToIndex({ index: next, animated: true });
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
-      {/* One vertical scroll */}
       <FlatList
-        data={[{ key: 'spacer' }]} // dummy
+        data={[{ key: 'dummy' }]}
         keyExtractor={(i) => i.key}
         renderItem={() => null}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.page}
         ListHeaderComponent={
           <View>
-            {/* Header */}
-            <View style={styles.header}>
+            {/* Header + mascotte */}
+            <View style={styles.headerRow}>
+              <Image
+                source={require('../../assets/images/ridzy_temps_de_lecture_mascotte.png')}
+                style={styles.mascotte}
+                contentFit="contain"
+              />
               <Text style={styles.bigTitle}>BIENVENUE</Text>
             </View>
 
@@ -153,39 +204,42 @@ export default function HomeScreen() {
                 value={search}
                 onChangeText={setSearch}
                 placeholder="Rechercher"
-                placeholderTextColor="rgba(41,20,37,0.55)"
+                placeholderTextColor="rgba(41,20,37,0.45)"
                 style={styles.searchInput}
               />
-              <Ionicons name="search" size={18} color="rgba(41,20,37,0.6)" />
+              <Ionicons name="search" size={18} color="rgba(41,20,37,0.60)" />
             </View>
 
-            {/* NOUVEAUTÉS */}
+            {/* NOUVEAUTÉS (paging, un gros livre au centre) */}
             <Text style={styles.sectionTitle}>Nouveautés</Text>
-
             <FlatList
               horizontal
+              pagingEnabled
               showsHorizontalScrollIndicator={false}
               data={newFiltered}
               keyExtractor={(item) => item.id}
-              ItemSeparatorComponent={() => <View style={{ width: 14 }} />}
-              contentContainerStyle={{ paddingBottom: 6 }}
+              snapToInterval={heroItemW}
+              decelerationRate="fast"
+              contentContainerStyle={{ paddingHorizontal: heroSideSpace }}
               renderItem={({ item }) => (
-                <Pressable style={[styles.heroCard, { width: heroW, height: heroH }]}>
-                  <Image
-                    source={{ uri: item.coverUrl }}
-                    style={StyleSheet.absoluteFillObject}
-                    contentFit="cover"
-                  />
-                  {item.badge ? (
-                    <View style={styles.badge}>
-                      <Text style={styles.badgeText}>{item.badge}</Text>
-                    </View>
-                  ) : null}
-                </Pressable>
+                <View style={{ width: heroItemW }}>
+                  <Pressable style={[styles.heroCard, { width: heroItemW, height: heroItemH }]}>
+                    <Image
+                      source={{ uri: item.coverUrl }}
+                      style={StyleSheet.absoluteFillObject}
+                      contentFit="cover"
+                    />
+                    {item.badge ? (
+                      <View style={styles.badge}>
+                        <Text style={styles.badgeText}>{item.badge}</Text>
+                      </View>
+                    ) : null}
+                  </Pressable>
+                </View>
               )}
             />
 
-            {/* POUR VOUS */}
+            {/* POUR VOUS (petits livres scroll) */}
             <View style={styles.rowTitle}>
               <Text style={styles.sectionTitle}>Pour vous</Text>
               <Pressable>
@@ -201,36 +255,53 @@ export default function HomeScreen() {
               ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
               renderItem={({ item }) => (
                 <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
-                  <Image
-                    source={{ uri: item.coverUrl }}
-                    style={StyleSheet.absoluteFillObject}
-                    contentFit="cover"
-                  />
+                  <Image source={{ uri: item.coverUrl }} style={StyleSheet.absoluteFillObject} contentFit="cover" />
                 </Pressable>
               )}
             />
 
-            {/* LIVRES DU MOMENT (card) */}
-            <View style={styles.momentCard}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.momentTitle}>LIVRES DU MOMENT</Text>
-                <Text style={styles.momentText}>
-                  Découvrez Conte de fées, par Stephen King
-                </Text>
-              </View>
+            {/* LIVRES DU MOMENT : 3 cartes + flèches dessous */}
+            <Text style={styles.sectionTitle}>Livres du moment !</Text>
 
-              <View style={styles.momentCover}>
-                <Image
-                  source={{
-                    uri: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
-                  }}
-                  style={StyleSheet.absoluteFillObject}
-                  contentFit="cover"
-                />
-                <View style={styles.badgeRed}>
-                  <Text style={styles.badgeRedText}>NOUVEAUTÉ</Text>
+            <FlatList
+              ref={momentRef}
+              horizontal
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              data={BOOKS_MOMENT}
+              keyExtractor={(item) => item.id}
+              snapToInterval={momentItemW}
+              decelerationRate="fast"
+              onMomentumScrollEnd={onMomentScrollEnd}
+              contentContainerStyle={{ paddingHorizontal: momentSideSpace }}
+              renderItem={({ item }) => (
+                <View style={{ width: momentItemW }}>
+                  <View style={[styles.momentCard, { width: momentItemW, height: momentItemH }]}>
+                    <View style={{ flex: 1, paddingRight: 12 }}>
+                      <Text style={styles.momentTitle}>{item.title.toUpperCase()}</Text>
+                      <Text style={styles.momentText}>Découvre {item.title}</Text>
+                    </View>
+
+                    <View style={styles.momentCover}>
+                      <Image source={{ uri: item.coverUrl }} style={StyleSheet.absoluteFillObject} contentFit="cover" />
+                      {item.badge ? (
+                        <View style={styles.badgeRed}>
+                          <Text style={styles.badgeRedText}>{item.badge}</Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  </View>
                 </View>
-              </View>
+              )}
+            />
+
+            <View style={styles.arrowsRow}>
+              <Pressable style={styles.arrowBtn} onPress={() => goMoment(-1)}>
+                <Ionicons name="chevron-back" size={18} color="#291425" />
+              </Pressable>
+              <Pressable style={styles.arrowBtn} onPress={() => goMoment(1)}>
+                <Ionicons name="chevron-forward" size={18} color="#291425" />
+              </Pressable>
             </View>
 
             {/* VOS AMIS AIMENT */}
@@ -244,11 +315,7 @@ export default function HomeScreen() {
               ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
               renderItem={({ item }) => (
                 <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
-                  <Image
-                    source={{ uri: item.coverUrl }}
-                    style={StyleSheet.absoluteFillObject}
-                    contentFit="cover"
-                  />
+                  <Image source={{ uri: item.coverUrl }} style={StyleSheet.absoluteFillObject} contentFit="cover" />
                   {item.badge ? (
                     <View style={styles.badgeMini}>
                       <Text style={styles.badgeMiniText}>{item.badge}</Text>
@@ -258,7 +325,7 @@ export default function HomeScreen() {
               )}
             />
 
-            {/* FANTASY */}
+            {/* GENRE (ex: Fantasy) */}
             <Text style={styles.sectionTitle}>Fantasy</Text>
 
             <FlatList
@@ -267,15 +334,11 @@ export default function HomeScreen() {
               data={fantasyFiltered}
               keyExtractor={(item) => item.id}
               ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
-              contentContainerStyle={{ paddingBottom: 22 }}
+              contentContainerStyle={{ paddingBottom: 110 }}
               renderItem={({ item }) => (
                 <View style={{ width: smallW }}>
                   <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
-                    <Image
-                      source={{ uri: item.coverUrl }}
-                      style={StyleSheet.absoluteFillObject}
-                      contentFit="cover"
-                    />
+                    <Image source={{ uri: item.coverUrl }} style={StyleSheet.absoluteFillObject} contentFit="cover" />
                   </Pressable>
                   <Text style={styles.bookCaption} numberOfLines={2}>
                     {item.title}
@@ -292,19 +355,22 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#FEF1EA' },
-  page: {
-    paddingHorizontal: 18,
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
+  page: { paddingHorizontal: 18, paddingTop: 10, paddingBottom: 20 },
 
-  header: {
-    marginTop: 4,
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 10,
     marginBottom: 10,
+  },
+  mascotte: {
+    width: 58,
+    height: 58,
   },
   bigTitle: {
     fontSize: 40,
     fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
     letterSpacing: 1,
   },
@@ -312,8 +378,8 @@ const styles = StyleSheet.create({
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.85)',
-    borderRadius: 18,
+    backgroundColor: 'rgba(252,194,113,0.25)',
+    borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1,
@@ -325,7 +391,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#291425',
     marginRight: 10,
-    fontWeight: '700',
+    fontWeight: '800',
   },
 
   sectionTitle: {
@@ -343,17 +409,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  seeMore: {
-    color: '#BD61A6',
-    fontWeight: '900',
-  },
+  seeMore: { color: '#BD61A6', fontWeight: '900' },
 
   heroCard: {
     borderRadius: 18,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.08)',
+    borderColor: 'rgba(41,20,37,0.10)',
   },
 
   smallCard: {
@@ -361,35 +424,30 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.08)',
+    borderColor: 'rgba(41,20,37,0.10)',
   },
 
   badge: {
     position: 'absolute',
     left: 12,
     bottom: 12,
-    backgroundColor: 'rgba(255,255,255,0.88)',
+    backgroundColor: 'rgba(255,255,255,0.90)',
     borderRadius: 999,
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
-  badgeText: {
-    fontWeight: '900',
-    color: '#291425',
-    fontSize: 12,
-  },
+  badgeText: { fontWeight: '900', color: '#291425', fontSize: 12 },
 
+  // Livres du moment
   momentCard: {
-    marginTop: 16,
     borderRadius: 18,
     padding: 14,
     backgroundColor: 'rgba(252,176,64,0.20)',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.08)',
+    borderColor: 'rgba(41,20,37,0.10)',
     flexDirection: 'row',
-    gap: 12,
     alignItems: 'center',
   },
   momentTitle: {
@@ -400,7 +458,7 @@ const styles = StyleSheet.create({
   },
   momentText: {
     fontSize: 13,
-    color: 'rgba(41,20,37,0.75)',
+    color: 'rgba(41,20,37,0.70)',
     fontWeight: '700',
     lineHeight: 18,
   },
@@ -420,28 +478,37 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
-  badgeRedText: {
-    color: '#FFFFFF',
-    fontWeight: '900',
-    fontSize: 10,
+  badgeRedText: { color: '#FFFFFF', fontWeight: '900', fontSize: 10 },
+
+  arrowsRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  arrowBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.75)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   badgeMini: {
     position: 'absolute',
     left: 8,
     bottom: 8,
-    backgroundColor: 'rgba(255,255,255,0.88)',
+    backgroundColor: 'rgba(255,255,255,0.90)',
     borderRadius: 999,
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
-  badgeMiniText: {
-    fontWeight: '900',
-    color: '#291425',
-    fontSize: 10,
-  },
+  badgeMiniText: { fontWeight: '900', color: '#291425', fontSize: 10 },
 
   bookCaption: {
     marginTop: 8,

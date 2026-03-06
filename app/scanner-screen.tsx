@@ -1,20 +1,27 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { CameraView, useCameraPermissions, CameraCapturedPicture } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useRouter } from 'expo-router';
 
 export default function ScannerScreen() {
+  const router = useRouter();
+
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [barcode, setBarcode] = useState<string | null>(null);
 
   useEffect(() => {
     requestPermission();
-  }, []);
+  }, [requestPermission]);
 
-  const handleBarcodeScanned = ({ type, data }: { type: string; data: string }) => {
+  const handleBarcodeScanned = ({ data }: { type: string; data: string }) => {
+    if (scanned) return; // sécurité anti double-scan
     setScanned(true);
     setBarcode(data);
     console.log('Code scanné:', data);
+
+    // IMPORTANT: push en string => super fiable
+    router.push(`/scan-result?isbn=${encodeURIComponent(data)}`);
   };
 
   if (!permission?.granted) {
@@ -29,16 +36,18 @@ export default function ScannerScreen() {
     <View style={styles.container}>
       <CameraView
         style={StyleSheet.absoluteFillObject}
-        barcodeScannerSettings={{
-          barcodeTypes: ["ean13", "ean8", "qr", "code128"]
-        }}
-        onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+        barcodeScannerSettings={{ barcodeTypes: ['ean13', 'ean8', 'qr', 'code128'] }}
+        onBarcodeScanned={handleBarcodeScanned}
       />
 
       {barcode && (
         <View style={styles.result}>
           <Text>Code détecté :</Text>
           <Text>{barcode}</Text>
+
+          <Text style={{ marginTop: 10 }} onPress={() => { setScanned(false); setBarcode(null); }}>
+            Scanner à nouveau
+          </Text>
         </View>
       )}
     </View>
@@ -46,9 +55,7 @@ export default function ScannerScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   result: {
     position: 'absolute',
     bottom: 50,

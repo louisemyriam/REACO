@@ -116,8 +116,9 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: 36,
+    fontFamily: 'GillSans-Bold',
     color: '#FBB040',
-    fontWeight: '900',
+    //fontWeight: '900',
   },
 
   logo: {
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
   },
   googleText: {
     color: 'white',
-    fontWeight: '800',
+    //fontWeight: '800',
+    fontFamily: 'GillSans-Bold',
   },
 
   appleBtn: {
@@ -170,7 +172,8 @@ const styles = StyleSheet.create({
   },
   appleText: {
     color: 'white',
-    fontWeight: '800',
+    //fontWeight: '800',
+    fontFamily: 'GillSans-Bold',
   },
 
   continueBtn: {
@@ -184,6 +187,7 @@ const styles = StyleSheet.create({
   continueText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: '900',
+    //fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
   },
 });

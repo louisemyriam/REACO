@@ -13,6 +13,9 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+
+type Tab = 'feed' | 'club' | 'event';
 
 type Post = {
   id: string;
@@ -48,16 +51,16 @@ type BookClub = {
 const START_POSTS: Post[] = [
   {
     id: '1',
-    user: 'Eric02',
+    user: 'Erik000002',
     content:
-      "Quelqu’un a compris pourquoi dans Les 200 derniers, le général n’a pas battu en retraite ?",
+      "Quelqu’un a compris pourquoi dans Les 200 guerriers le général n’a pas battu en retraite ?",
     liked: false,
     likes: 7,
   },
   {
     id: '2',
     user: 'Rainbow26',
-    content: 'On en parle du dernier chapitre de Powerfull ??',
+    content: 'On en parle du dernier chapitre de Powerfull ?',
     imageUrl:
       'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop',
     liked: true,
@@ -68,7 +71,7 @@ const START_POSTS: Post[] = [
 const CLUBS: BookClub[] = [
   {
     id: 'c1',
-    title: 'Soft Book Club',
+    title: 'Powerful tome I',
     coverUrl:
       'https://images.pexels.com/photos/590493/pexels-photo-590493.jpeg?auto=compress&cs=tinysrgb&w=1200',
     members: 128,
@@ -82,91 +85,43 @@ const CLUBS: BookClub[] = [
     rooms: [
       { id: 'r1', name: 'Lobby', desc: 'Discussions générales' },
       { id: 'r2', name: 'Intros', desc: 'Présente-toi au club' },
-      { id: 'r3', name: 'Recommandations', desc: 'Les livres doux du moment' },
+      { id: 'r3', name: 'Recommandations', desc: 'Les recos du moment' },
     ],
   },
   {
     id: 'c2',
-    title: 'Les folles du Dark',
+    title: 'Bridgerton 3 & 4',
     coverUrl:
       'https://images.pexels.com/photos/1053687/pexels-photo-1053687.jpeg?auto=compress&cs=tinysrgb&w=1200',
     members: 342,
     activity: 'Très actif',
-    genres: ['Dark romance', 'Thriller', 'Spicy'],
+    genres: ['Romance', 'Drama'],
     creator: {
       pseudo: 'noir_queen',
       avatarUrl:
         'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=300',
     },
     rooms: [
-      { id: 'r1', name: 'Lobby', desc: 'On discute sans filtre' },
-      { id: 'r2', name: 'Warnings', desc: 'TW / limites / règles' },
-      { id: 'r3', name: 'Lectures du mois', desc: 'Choix & votes' },
-    ],
-  },
-  {
-    id: 'c3',
-    title: 'Le Cosy Bookclub',
-    coverUrl:
-      'https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    members: 205,
-    activity: 'Actif cette semaine',
-    genres: ['Cozy mystery', 'Slice of life', 'Classiques'],
-    creator: {
-      pseudo: 'tea.and.pages',
-      avatarUrl:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=300',
-    },
-    rooms: [
-      { id: 'r1', name: 'Lobby', desc: 'Thé, plaids, chapitres' },
+      { id: 'r1', name: 'Lobby', desc: 'On discute' },
       { id: 'r2', name: 'Spoilers', desc: 'Zone spoilers' },
-      { id: 'r3', name: 'Cosy recos', desc: 'Idées lectures cocoon' },
-    ],
-  },
-  {
-    id: 'c4',
-    title: 'Colleen Hoover',
-    coverUrl:
-      'https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    members: 511,
-    activity: 'Actif maintenant',
-    genres: ['Romance', 'Drama', 'New Adult'],
-    creator: {
-      pseudo: 'coho_addict',
-      avatarUrl:
-        'https://images.pexels.com/photos/1542085/pexels-photo-1542085.jpeg?auto=compress&cs=tinysrgb&w=300',
-    },
-    rooms: [
-      { id: 'r1', name: 'Lobby', desc: 'Tout CoHo' },
-      { id: 'r2', name: 'Lectures en cours', desc: 'Avancement par chapitre' },
-      { id: 'r3', name: 'Hot takes', desc: 'Débats & opinions' },
-    ],
-  },
-  {
-    id: 'c5',
-    title: 'Love & Drama',
-    coverUrl:
-      'https://images.pexels.com/photos/1301585/pexels-photo-1301585.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    members: 274,
-    activity: 'Actif aujourd’hui',
-    genres: ['Romance', 'Drama', 'Enemies to lovers'],
-    creator: {
-      pseudo: 'drama_reader',
-      avatarUrl:
-        'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300',
-    },
-    rooms: [
-      { id: 'r1', name: 'Lobby', desc: 'Bienvenue' },
-      { id: 'r2', name: 'Intros', desc: 'Présente-toi' },
-      { id: 'r3', name: 'Recos', desc: 'Les meilleurs dramas' },
-      { id: 'r4', name: 'Spoilers', desc: 'Zone spoilers' },
+      { id: 'r3', name: 'Lectures', desc: 'Avancement' },
     ],
   },
 ];
 
+// Event mock (tu mettras tes vraies données après)
+const EVENT = {
+  title: 'Challenge de Mars 2026',
+  remaining: '2 jours restants',
+  desc: 'LISEZ 5 ROMANS DE ROMANCE\nGagne une musique exclusive et 50 points !',
+  progressLabelLeft: 'Progression',
+  progressLabelRight: '3/5 livres lus',
+  progressPct: 0.6,
+};
+
 export default function FilActualiteScreen() {
   const [search, setSearch] = useState('');
-  const [tab, setTab] = useState<'feed' | 'club'>('feed');
+  const [tab, setTab] = useState<Tab>('club');
 
   // FEED
   const [text, setText] = useState('');
@@ -226,10 +181,17 @@ export default function FilActualiteScreen() {
     setJoinedClubIds((prev) => ({ ...prev, [clubId]: true }));
   };
 
-  const data = tab === 'feed' ? filteredPosts : filteredClubs;
+  const data = tab === 'feed' ? filteredPosts : tab === 'club' ? filteredClubs : [];
 
   return (
     <SafeAreaView style={styles.safe}>
+      <LinearGradient
+        colors={['#FEF1EA', '#FEC271']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 0.5, y: 1 }}
+        style={StyleSheet.absoluteFillObject}
+      />
+
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -249,51 +211,76 @@ export default function FilActualiteScreen() {
                   value={search}
                   onChangeText={setSearch}
                   placeholder="Rechercher"
-                  placeholderTextColor="rgba(41,20,37,0.55)"
+                  placeholderTextColor="rgba(41,20,37,0.45)"
                   style={styles.searchInput}
                 />
                 <Ionicons name="search" size={18} color="rgba(41,20,37,0.6)" />
               </View>
 
-              {/* Segmented buttons */}
-              <View style={styles.segmentRow}>
-                <Pressable
-                  onPress={() => setTab('feed')}
-                  style={[
-                    styles.segmentBtn,
-                    tab === 'feed' ? styles.segmentActive : styles.segmentInactive,
-                  ]}
-                >
-                  <Text
+              {/* Tabs + Mascotte row */}
+              <View style={styles.headerRow}>
+                <View style={styles.verticalTabs}>
+                  <Pressable
+                    onPress={() => setTab('feed')}
                     style={[
-                      styles.segmentText,
-                      tab === 'feed'
-                        ? styles.segmentTextActive
-                        : styles.segmentTextInactive,
+                      styles.vTab,
+                      tab === 'feed' ? styles.vTabActive : styles.vTabInactive,
                     ]}
                   >
-                    Fil d’actu
-                  </Text>
-                </Pressable>
+                    <Text
+                      style={[
+                        styles.vTabText,
+                        tab === 'feed' ? styles.vTabTextActive : styles.vTabTextInactive,
+                      ]}
+                    >
+                      Feed
+                    </Text>
+                  </Pressable>
 
-                <Pressable
-                  onPress={() => setTab('club')}
-                  style={[
-                    styles.segmentBtn,
-                    tab === 'club' ? styles.segmentActive : styles.segmentInactive,
-                  ]}
-                >
-                  <Text
+                  <Pressable
+                    onPress={() => setTab('club')}
                     style={[
-                      styles.segmentText,
-                      tab === 'club'
-                        ? styles.segmentTextActive
-                        : styles.segmentTextInactive,
+                      styles.vTab,
+                      tab === 'club' ? styles.vTabActive : styles.vTabInactive,
                     ]}
                   >
-                    Club
-                  </Text>
-                </Pressable>
+                    <Text
+                      style={[
+                        styles.vTabText,
+                        tab === 'club' ? styles.vTabTextActive : styles.vTabTextInactive,
+                      ]}
+                    >
+                      Club
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => setTab('event')}
+                    style={[
+                      styles.vTab,
+                      tab === 'event' ? styles.vTabActive : styles.vTabInactive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.vTabText,
+                        tab === 'event' ? styles.vTabTextActive : styles.vTabTextInactive,
+                      ]}
+                    >
+                      Event
+                    </Text>
+                  </Pressable>
+                </View>
+
+                {/* Mascotte (placeholder) */}
+                <View style={styles.mascotWrap}>
+
+                  <Image
+  source={require('../../assets/images/ridzy_feed_mascotte.png')}
+  style={styles.mascot}
+  contentFit="contain"
+/>
+                </View>
               </View>
 
               {/* Composer only on feed */}
@@ -303,35 +290,73 @@ export default function FilActualiteScreen() {
                     value={text}
                     onChangeText={setText}
                     placeholder="Partagez vos réflexions sur votre lecture..."
-                    placeholderTextColor="rgba(41,20,37,0.55)"
+                    placeholderTextColor="rgba(41,20,37,0.45)"
                     multiline
                     style={styles.composerInput}
                   />
-                  <Pressable onPress={publish} style={styles.publishBtn}>
-                    <Text style={styles.publishText}>Publier</Text>
-                  </Pressable>
+
+                  <View style={styles.composerBottom}>
+                    <Pressable style={styles.mediaBtn}>
+                      <Ionicons name="image-outline" size={22} color="#FBB040" />
+                    </Pressable>
+
+                    <Pressable onPress={publish} style={styles.publishBtn}>
+                      <Text style={styles.publishText}>Publier</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              ) : null}
+
+              {/* EVENT header card */}
+              {tab === 'event' ? (
+                <View style={styles.eventCard}>
+                  <View style={styles.eventTopRow}>
+                    <Text style={styles.eventTitle}>{EVENT.title}</Text>
+                    <View style={styles.eventPill}>
+                      <Text style={styles.eventPillText}>{EVENT.remaining}</Text>
+                    </View>
+                  </View>
+
+                  <Text style={styles.eventDesc}>{EVENT.desc}</Text>
+
+                  <View style={styles.eventProgRow}>
+                    <Text style={styles.eventProgLabel}>{EVENT.progressLabelLeft}</Text>
+                    <Text style={styles.eventProgRight}>{EVENT.progressLabelRight}</Text>
+                  </View>
+
+                  <View style={styles.progressTrack}>
+                    <View style={[styles.progressFill, { width: `${Math.round(EVENT.progressPct * 100)}%` }]} />
+                  </View>
                 </View>
               ) : null}
             </View>
           }
           ListEmptyComponent={
-            <View style={styles.empty}>
-              <Text style={styles.emptyTitle}>
-                {tab === 'feed' ? 'Aucun post' : 'Aucun club'}
-              </Text>
-              <Text style={styles.emptyText}>
-                {tab === 'feed'
-                  ? 'Essayez une autre recherche ou publiez un message.'
-                  : 'Essayez une autre recherche.'}
-              </Text>
-            </View>
+            tab === 'event' ? (
+              <View style={{ height: 12 }} />
+            ) : (
+              <View style={styles.empty}>
+                <Text style={styles.emptyTitle}>
+                  {tab === 'feed' ? 'Aucun post' : 'Aucun club'}
+                </Text>
+                <Text style={styles.emptyText}>
+                  {tab === 'feed'
+                    ? 'Essayez une autre recherche ou publiez un message.'
+                    : 'Essayez une autre recherche.'}
+                </Text>
+              </View>
+            )
           }
           renderItem={({ item }: any) => {
             if (tab === 'feed') {
               const p = item as Post;
               return (
                 <View style={styles.postCard}>
-                  <Text style={styles.user}>{p.user}</Text>
+                  <View style={styles.postHeaderRow}>
+                    <View style={styles.postAvatar} />
+                    <Text style={styles.user}>{p.user}</Text>
+                  </View>
+
                   <Text style={styles.content}>{p.content}</Text>
 
                   {p.imageUrl ? (
@@ -354,7 +379,6 @@ export default function FilActualiteScreen() {
                         size={18}
                         color={p.liked ? '#BD61A6' : 'rgba(41,20,37,0.65)'}
                       />
-                      <Text style={styles.actionText}>{p.likes}</Text>
                     </Pressable>
 
                     <Pressable style={styles.actionBtn}>
@@ -363,7 +387,6 @@ export default function FilActualiteScreen() {
                         size={18}
                         color="rgba(41,20,37,0.65)"
                       />
-                      <Text style={styles.actionText}>Commenter</Text>
                     </Pressable>
 
                     <Pressable style={styles.actionBtn}>
@@ -372,52 +395,35 @@ export default function FilActualiteScreen() {
                         size={18}
                         color="rgba(41,20,37,0.65)"
                       />
-                      <Text style={styles.actionText}>Partager</Text>
                     </Pressable>
                   </View>
                 </View>
               );
             }
 
-            // CLUB CARD
-            const c = item as BookClub;
-            return (
-              <Pressable
-                style={styles.clubCard}
-                onPress={() => setSelectedClub(c)}
-              >
-                {/* Cover */}
-                <View style={styles.clubCover}>
-                  <Image
-                    source={{ uri: c.coverUrl }}
-                    style={StyleSheet.absoluteFillObject}
-                    contentFit="cover"
-                  />
-                </View>
-
-                {/* Row: avatar + title + members */}
-                <View style={styles.clubInfoRow}>
-                  <Image source={{ uri: c.creator.avatarUrl }} style={styles.avatar} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.clubTitle} numberOfLines={1}>
-                      {c.title}
-                    </Text>
-                    <Text style={styles.clubMeta} numberOfLines={1}>
-                      @{c.creator.pseudo} • {c.activity}
-                    </Text>
+            if (tab === 'club') {
+              const c = item as BookClub;
+              return (
+                <Pressable
+                  style={styles.clubCard}
+                  onPress={() => setSelectedClub(c)}
+                >
+                  <View style={styles.clubCover}>
+                    <Image
+                      source={{ uri: c.coverUrl }}
+                      style={StyleSheet.absoluteFillObject}
+                      contentFit="cover"
+                    />
                   </View>
+                </Pressable>
+              );
+            }
 
-                  <View style={styles.membersPill}>
-                    <Ionicons name="people" size={14} color="rgba(41,20,37,0.7)" />
-                    <Text style={styles.membersText}>{c.members}</Text>
-                  </View>
-                </View>
-              </Pressable>
-            );
+            return null;
           }}
         />
 
-        {/* POPUP / MODAL */}
+        {/* CLUB MODAL */}
         <Modal
           visible={!!selectedClub}
           transparent
@@ -426,14 +432,12 @@ export default function FilActualiteScreen() {
         >
           <View style={styles.modalBackdrop}>
             <View style={styles.modalCard}>
-              {/* close */}
               <Pressable style={styles.modalClose} onPress={() => setSelectedClub(null)}>
                 <Ionicons name="close" size={18} color="rgba(41,20,37,0.75)" />
               </Pressable>
 
               {selectedClub ? (
                 <>
-                  {/* cover */}
                   <View style={styles.modalCover}>
                     <Image
                       source={{ uri: selectedClub.coverUrl }}
@@ -442,10 +446,8 @@ export default function FilActualiteScreen() {
                     />
                   </View>
 
-                  {/* title */}
                   <Text style={styles.modalTitle}>{selectedClub.title}</Text>
 
-                  {/* creator + join + members */}
                   <View style={styles.modalTopRow}>
                     <View style={styles.creatorRow}>
                       <Image source={{ uri: selectedClub.creator.avatarUrl }} style={styles.avatarSmall} />
@@ -472,10 +474,7 @@ export default function FilActualiteScreen() {
                     </View>
                   </View>
 
-                  {/* activity + genres */}
-                  <Text style={styles.modalMeta}>
-                    {selectedClub.activity}
-                  </Text>
+                  <Text style={styles.modalMeta}>{selectedClub.activity}</Text>
 
                   <View style={styles.genreRow}>
                     {selectedClub.genres.map((g) => (
@@ -485,7 +484,6 @@ export default function FilActualiteScreen() {
                     ))}
                   </View>
 
-                  {/* rooms */}
                   <Text style={styles.roomsTitle}>Chat rooms</Text>
 
                   <View style={{ gap: 10 }}>
@@ -514,189 +512,235 @@ export default function FilActualiteScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#FFF4EC' },
-  listContent: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 18 },
+  safe: { flex: 1, backgroundColor: '#FEF1EA' },
+  listContent: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 22 },
 
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 14,
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
-    marginBottom: 10,
   },
   searchInput: {
     flex: 1,
     fontSize: 14,
+    fontWeight: '700',
     color: '#291425',
     marginRight: 10,
   },
 
-  segmentRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
-  segmentBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 999,
+  headerRow: {
+    marginTop: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  verticalTabs: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+
+ vTab: {
+  width: 42,
+  height: 92,
+  borderRadius: 12,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 1,
+},
+  vTabActive: {
+    backgroundColor: '#FBB040',
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  vTabInactive: {
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  vTabText: {
+    fontWeight: '900',
+    fontSize: 14,
+    transform: [{ rotate: '-90deg' }],
+  },
+  vvTabTextActive: { color: '#FFFFFF' },
+  vTabTextInactive: { color: '#FBB040' },
+
+  mascotWrap: {
+    width: 120,
+    height: 90,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  mascot: {
+    width: 120,
+    height: 90,
+  },
+
+  // FEED composer
+  composer: {
+    marginTop: 14,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 18,
+    padding: 14,
     borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.10)',
+  },
+  composerInput: {
+    minHeight: 70,
+    textAlignVertical: 'top',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#291425',
+  },
+  composerBottom: {
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  mediaBtn: {
+    width: 46,
+    height: 46,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  segmentActive: {
-    backgroundColor: '#FBB040',
-    borderColor: 'rgba(41,20,37,0.10)',
-  },
-  segmentInactive: {
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    borderColor: 'rgba(41,20,37,0.10)',
-  },
-  segmentText: { fontSize: 13, fontWeight: '800' },
-  segmentTextActive: { color: '#291425' },
-  segmentTextInactive: { color: 'rgba(41,20,37,0.65)' },
-
-  composer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 22,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.10)',
-    marginBottom: 12,
-  },
-  composerInput: {
-    minHeight: 90,
-    textAlignVertical: 'top',
-    fontSize: 14,
-    color: '#291425',
-    lineHeight: 20,
-  },
   publishBtn: {
-    alignSelf: 'flex-end',
-    marginTop: 10,
     backgroundColor: '#FBB040',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
     borderRadius: 14,
   },
-  publishText: { fontSize: 13, fontWeight: '900', color: '#291425' },
+  publishText: { fontSize: 13, fontWeight: '900', color: '#FEF1EA' },
 
+  // EVENT
+  eventCard: {
+    marginTop: 14,
+    backgroundColor: 'rgba(255,255,255,0.45)',
+    borderRadius: 18,
+    padding: 14,
+    borderWidth: 3,
+    borderColor: '#3B82F6',
+  },
+  eventTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  eventTitle: { fontSize: 20, fontWeight: '900', color: '#FEF1EA', width: '70%' },
+  eventPill: {
+    backgroundColor: 'rgba(255,255,255,0.35)',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 14,
+  },
+  eventPillText: { fontWeight: '900', color: '#FEF1EA' },
+  eventDesc: {
+    marginTop: 10,
+    fontWeight: '800',
+    color: 'rgba(255,255,255,0.95)',
+    lineHeight: 18,
+  },
+  eventProgRow: {
+    marginTop: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  eventProgLabel: { fontWeight: '900', color: '#FEF1EA' },
+  eventProgRight: { fontWeight: '900', color: '#FEF1EA' },
+  progressTrack: {
+    marginTop: 8,
+    height: 10,
+    borderRadius: 999,
+    backgroundColor: 'rgba(255,255,255,0.35)',
+    overflow: 'hidden',
+  },
+  progressFill: { height: '100%', backgroundColor: '#FEF1EA' },
+
+  // FEED cards
   postCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 18,
     padding: 14,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
+  postHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  postAvatar: {
+    width: 34,
+    height: 34,
+    borderRadius: 999,
+    backgroundColor: 'rgba(189,97,166,0.22)',
+  },
   user: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '900',
     color: '#291425',
-    marginBottom: 6,
   },
   content: {
+    marginTop: 10,
     fontSize: 14,
+    fontWeight: '700',
     color: '#291425',
     lineHeight: 20,
-    marginBottom: 10,
   },
   postImage: {
+    marginTop: 12,
     width: '100%',
-    height: 190,
-    borderRadius: 18,
+    height: 210,
+    borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#FFF4EC',
-    marginBottom: 10,
   },
-  actions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
+  actions: { flexDirection: 'row', gap: 14, alignItems: 'center', marginTop: 12 },
   actionBtn: {
-    flexDirection: 'row',
-    gap: 6,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
     alignItems: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,244,236,0.90)',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.65)',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.06)',
-  },
-  actionText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: 'rgba(41,20,37,0.65)',
+    borderColor: 'rgba(41,20,37,0.08)',
   },
 
-  // CLUB CARD
+  // CLUB cards
   clubCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 18,
     padding: 12,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
   clubCover: {
     width: '100%',
-    height: 220,
-    borderRadius: 18,
+    height: 260,
+    borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#FFF4EC',
   },
-  clubInfoRow: {
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  avatar: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: '#FFF4EC',
-  },
-  clubTitle: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: '#291425',
-  },
-  clubMeta: {
-    marginTop: 2,
-    fontSize: 12,
-    color: 'rgba(41,20,37,0.60)',
-  },
-  membersPill: {
-    flexDirection: 'row',
-    gap: 6,
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-    backgroundColor: 'rgba(255,244,236,0.90)',
-    borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.06)',
-  },
-  membersText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: 'rgba(41,20,37,0.70)',
-  },
 
   empty: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.55)',
+    borderRadius: 18,
     padding: 16,
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
     marginTop: 10,
   },
-  emptyTitle: {
-    fontSize: 14,
-    fontWeight: '900',
-    color: '#291425',
-    marginBottom: 6,
-  },
-  emptyText: { fontSize: 13, color: 'rgba(41,20,37,0.65)', lineHeight: 18 },
+  emptyTitle: { fontSize: 14, fontWeight: '900', color: '#291425', marginBottom: 6 },
+  emptyText: { fontSize: 13, fontWeight: '700', color: 'rgba(41,20,37,0.65)', lineHeight: 18 },
 
-  // MODAL
+  // CLUB modal (identique à ton style)
   modalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(41,20,37,0.45)',
@@ -726,12 +770,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginTop: 8,
   },
-  modalTitle: {
-    marginTop: 12,
-    fontSize: 18,
-    fontWeight: '900',
-    color: '#291425',
-  },
+  modalTitle: { marginTop: 12, fontSize: 18, fontWeight: '900', color: '#291425' },
   modalTopRow: {
     marginTop: 10,
     flexDirection: 'row',
@@ -739,41 +778,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 10,
   },
-  creatorRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  avatarSmall: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#FFFFFF',
-  },
-  creatorText: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: 'rgba(41,20,37,0.75)',
-  },
-  joinRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  joinBtn: {
-    backgroundColor: '#FBB040',
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 14,
-  },
-  joinBtnDone: {
-    backgroundColor: '#BD61A6',
-  },
-  joinText: {
-    fontSize: 13,
-    fontWeight: '900',
-    color: '#291425',
-  },
+  creatorRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  avatarSmall: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#FFFFFF' },
+  creatorText: { fontSize: 13, fontWeight: '800', color: 'rgba(41,20,37,0.75)' },
+  joinRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  joinBtn: { backgroundColor: '#FBB040', paddingHorizontal: 14, paddingVertical: 10, borderRadius: 14 },
+  joinBtnDone: { backgroundColor: '#BD61A6' },
+  joinText: { fontSize: 13, fontWeight: '900', color: '#291425' },
   membersPillSmall: {
     flexDirection: 'row',
     gap: 6,
@@ -785,18 +796,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.08)',
   },
-  modalMeta: {
-    marginTop: 10,
-    fontSize: 13,
-    fontWeight: '700',
-    color: 'rgba(41,20,37,0.65)',
-  },
-  genreRow: {
-    marginTop: 8,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
+  membersText: { fontSize: 12, fontWeight: '800', color: 'rgba(41,20,37,0.70)' },
+  modalMeta: { marginTop: 10, fontSize: 13, fontWeight: '700', color: 'rgba(41,20,37,0.65)' },
+  genreRow: { marginTop: 8, flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   genrePill: {
     backgroundColor: 'rgba(255,255,255,0.8)',
     borderWidth: 1,
@@ -805,18 +807,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  genreText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: 'rgba(41,20,37,0.70)',
-  },
-  roomsTitle: {
-    marginTop: 14,
-    marginBottom: 10,
-    fontSize: 14,
-    fontWeight: '900',
-    color: '#291425',
-  },
+  genreText: { fontSize: 12, fontWeight: '700', color: 'rgba(41,20,37,0.70)' },
+  roomsTitle: { marginTop: 14, marginBottom: 10, fontSize: 14, fontWeight: '900', color: '#291425' },
   roomItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -827,14 +819,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
-  roomName: {
-    fontSize: 13,
-    fontWeight: '900',
-    color: '#291425',
-  },
-  roomDesc: {
-    marginTop: 2,
-    fontSize: 12,
-    color: 'rgba(41,20,37,0.60)',
-  },
+  roomName: { fontSize: 13, fontWeight: '900', color: '#291425' },
+  roomDesc: { marginTop: 2, fontSize: 12, color: 'rgba(41,20,37,0.60)' },
 });

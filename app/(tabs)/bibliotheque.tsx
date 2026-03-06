@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
 import {
   SafeAreaView,
@@ -12,6 +13,8 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
+import { useLibraryStore } from '../store/libraryStore';
+
 
 type Book = {
   id: string;
@@ -68,34 +71,39 @@ const WISHLIST: Book[] = [
 ];
 
 export default function BibliothequeScreen() {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const { lectures, wishlist } = useLibraryStore();
+  const lecturesAll = useMemo(() => [...lectures, ...LECTURES], [lectures]);
+const wishlistAll = useMemo(() => [...wishlist, ...WISHLIST], [wishlist]);
+
 
   const screenW = Dimensions.get('window').width;
   const gap = 12;
   const padding = 18;
 
   const gridItemW = Math.floor((screenW - padding * 2 - gap) / 2);
-  const gridItemH = Math.floor(gridItemW * 1.35);
+  const gridItemH = Math.floor(gridItemW * 1.05); // un peu moins haut = plus proche maquette
 
-  const wishW = 120;
-  const wishH = Math.floor(wishW * 1.45);
+  const wishW = gridItemW; // même largeur que les cartes en haut (maquette)
+  const wishH = Math.floor(wishW * 1.05);
 
   const lecturesFiltered = useMemo(() => {
     const s = search.trim().toLowerCase();
-    if (!s) return LECTURES;
-    return LECTURES.filter((b) => b.title.toLowerCase().includes(s));
+    if (!s) return lecturesAll;
+    return lecturesAll.filter((b) => b.title.toLowerCase().includes(s));
   }, [search]);
 
   const wishlistFiltered = useMemo(() => {
     const s = search.trim().toLowerCase();
-    if (!s) return WISHLIST;
-    return WISHLIST.filter((b) => b.title.toLowerCase().includes(s));
+    if (!s) return wishlistAll;
+return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
   }, [search]);
 
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Main vertical scroll */}
       <FlatList
         data={lecturesFiltered}
         keyExtractor={(item) => item.id}
@@ -127,12 +135,7 @@ export default function BibliothequeScreen() {
             <Text style={styles.h1}>Ajoutez vos livres</Text>
 
             {/* Add/Scan box */}
-            <Pressable
-              style={styles.scanBox}
-              onPress={() => {
-                // later: open camera / barcode scan
-              }}
-            >
+            <Pressable style={styles.scanBox} onPress={() => router.push('/scanner-screen')}>
               <View style={styles.scanCornerTL} />
               <View style={styles.scanCornerTR} />
               <View style={styles.scanCornerBL} />
@@ -156,15 +159,15 @@ export default function BibliothequeScreen() {
                 contentFit="cover"
               />
             </Pressable>
-            <Text style={styles.bookTitle} numberOfLines={2}>
-              {item.title}
-            </Text>
+
+            {/* Maquette: pas de titre affiché */}
+            {/* <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text> */}
           </View>
         )}
         ListFooterComponent={
-          <View>
+          <View style={{ paddingTop: 8 }}>
             {/* Wishlist */}
-            <Text style={[styles.sectionTitle, { marginTop: 14 }]}>Wishlist</Text>
+            <Text style={[styles.sectionTitle, { marginTop: 6 }]}>Liste de souhaits</Text>
 
             <FlatList
               horizontal
@@ -181,19 +184,20 @@ export default function BibliothequeScreen() {
                       contentFit="cover"
                     />
                   </Pressable>
-                  <Text style={styles.bookTitle} numberOfLines={2}>
-                    {item.title}
-                  </Text>
+
+                  {/* Maquette: pas de titre affiché */}
+                  {/* <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text> */}
                 </View>
               )}
             />
 
-            <View style={{ height: 24 }} />
+            {/* IMPORTANT: espace pour éviter que la tab bar cache le bas */}
+            <View style={{ height: 110 }} />
           </View>
         }
       />
 
-      {/* Filters modal (simple placeholder) */}
+      {/* Filters modal */}
       <Modal visible={filtersOpen} transparent animationType="fade">
         <Pressable style={styles.modalOverlay} onPress={() => setFiltersOpen(false)}>
           <Pressable style={styles.modalCard} onPress={() => {}}>
@@ -207,7 +211,7 @@ export default function BibliothequeScreen() {
                 <Text style={styles.modalChipText}>Terminés</Text>
               </Pressable>
               <Pressable style={styles.modalChip}>
-                <Text style={styles.modalChipText}>Wishlist</Text>
+                <Text style={styles.modalChipText}>Liste de souhaits</Text>
               </Pressable>
             </View>
 
@@ -277,10 +281,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    
   },
 
-  // corners like scan frame
   scanCornerTL: {
     position: 'absolute',
     top: 12,
@@ -340,17 +342,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginTop: 14,
     marginBottom: 10,
-    fontSize: 16,
+    fontSize: 24, // maquette: titre plus gros
     fontWeight: '900',
     color: '#291425',
   },
 
   bookCard: {
-    borderRadius: 16,
+    borderRadius: 18, // un poil plus “soft” comme maquette
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.08)',
+    borderColor: 'rgba(41,20,37,0.10)',
   },
 
   bookTitle: {
