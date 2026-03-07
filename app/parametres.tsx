@@ -227,6 +227,7 @@ const styles = StyleSheet.create({
    flex: 1,
    textAlign: 'center',
    fontSize: 22,
+   fontFamily: 'GillSans',
    fontWeight: '900',
    color: '#291425',
  },

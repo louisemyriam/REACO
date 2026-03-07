@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
     fontSize: 34,
     lineHeight: 34,
     color: '#FEC271',
-    fontWeight: '900',
+    //fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
   },
 
   question: {

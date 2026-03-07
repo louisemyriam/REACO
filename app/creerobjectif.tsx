@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: '#FFFFFF',
     fontSize: 50,
+    fontFamily: 'GillSans',
     fontWeight: '700',
   },
   overlay: {

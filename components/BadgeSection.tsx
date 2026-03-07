@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
 
   badgeIcon: {
     fontSize: 28,
+    fontFamily: 'GillSans',
     marginBottom: 6,
   },
 

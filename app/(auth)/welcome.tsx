@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '800',
     fontSize: 16,
+    fontFamily: 'GillSans',
   },
 
   // CONNEXION (rose clair)

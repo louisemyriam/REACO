@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 50,
     fontWeight: '700',
+    fontFamily: 'GillSans',
   },
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.45)', // assombrit l'image

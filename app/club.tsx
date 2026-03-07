@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.75)',
     borderColor: 'rgba(41,20,37,0.10)',
   },
-  segmentText: { fontSize: 13, fontWeight: '800' },
+  segmentText: { fontSize: 13, fontFamily: 'GillSans', fontWeight: '800' },
   segmentTextActive: { color: '#291425' },
   segmentTextInactive: { color: 'rgba(41,20,37,0.65)' },
 
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 13,
-    fontWeight: '900',
+    fontFamily: 'GillSans-SemiBold',
+    //fontWeight: '900',
     color: '#291425',
     marginBottom: 10,
   },
@@ -251,7 +252,8 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 14,
-    fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
+    //fontWeight: '900',
     color: '#291425',
     marginBottom: 6,
   },

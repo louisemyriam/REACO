@@ -87,7 +87,7 @@ export default function LoginScreen() {
 
             <Pressable style={styles.appleBtn}>
               <Text style={styles.appleText}>Identification</Text>
-              <Text style={{ fontSize: 18 }}></Text>
+              <Text style={{ fontSize: 18, fontFamily: 'GillSans'}}></Text>
             </Pressable>
           </View>
 

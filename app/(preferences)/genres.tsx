@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
 
   question: {
     fontSize: 34,
-    fontWeight: '900',
+   // fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
     lineHeight: 38,
     marginBottom: 10,

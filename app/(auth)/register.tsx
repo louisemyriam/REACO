@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     color: '#291425',
     fontSize: 15,
+    fontFamily: 'GillSans',
   },
 
   socialBtn: {

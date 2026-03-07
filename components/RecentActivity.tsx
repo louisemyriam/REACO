@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 18,
-    fontWeight: '900',
+    //fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
     marginBottom: 14,
   },

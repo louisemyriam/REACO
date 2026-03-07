@@ -84,7 +84,8 @@ const styles = StyleSheet.create({
 
   avatarText: {
     fontSize: 32,
-    fontWeight: '900',
+    //fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
   },
 

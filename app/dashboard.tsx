@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
   topTitle: {
     flex: 1,
     textAlign: 'center',
-    fontWeight: '900',
+   // fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
     fontSize: 18,
   },

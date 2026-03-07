@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
   /* title */
   question: {
     fontSize: 36,
-    fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
+   // fontWeight: '900',
     color: '#291425',
     textAlign: 'center',
     lineHeight: 40,

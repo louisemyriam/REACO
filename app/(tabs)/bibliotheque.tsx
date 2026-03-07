@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontWeight: '700',
+    fontFamily: 'GillSans',
     color: '#291425',
     marginRight: 10,
   },

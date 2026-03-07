@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '800',
+    fontFamily: 'GillSans',
     color: '#291425', // Ridzy dark
     flex: 1,
   },

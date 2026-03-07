@@ -41,7 +41,7 @@ export default function ScanResultScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 18, justifyContent: 'center', backgroundColor: '#FEF1EA' },
-  title: { fontSize: 22, fontWeight: '900', color: '#291425', marginBottom: 12 },
+  title: { fontSize: 22, fontFamily: 'GillSans-Bold', color: '#291425', marginBottom: 12 },
   text: { fontSize: 14, fontWeight: '700', color: 'rgba(41,20,37,0.7)', marginBottom: 18 },
   btn: { backgroundColor: '#FBB040', paddingVertical: 14, borderRadius: 14, alignItems: 'center', marginBottom: 10 },
   btnGhost: { backgroundColor: 'rgba(255,255,255,0.7)', borderWidth: 1, borderColor: 'rgba(41,20,37,0.08)' },

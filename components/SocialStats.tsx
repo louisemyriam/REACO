@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
 
   statValue: {
     fontSize: 20,
-    fontWeight: '900',
+   //fontWeight: '900',
+    fontFamily: 'GillSans-Bold',
     color: '#291425',
   },
 

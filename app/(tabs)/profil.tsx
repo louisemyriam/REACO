@@ -321,10 +321,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(189,97,166,0.35)',
   },
   avatarFallback: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  avatarLetter: { fontWeight: '900', color: '#291425', fontSize: 22 },
+  avatarLetter: { fontWeight: '900', color: '#291425', fontSize: 22, fontFamily: 'GillSans'},
 
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  username: { fontWeight: '900', color: '#291425', fontSize: 18 },
+  username: { fontWeight: '900', color: '#291425', fontSize: 18, fontFamily: 'GillSans'},
   smallIconInline: {
     width: 28,
     height: 28,

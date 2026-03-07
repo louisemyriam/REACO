@@ -27,7 +27,7 @@ export default function TabLayout() {
         },
         tabBarActiveTintColor:'#F5C542',
         tabBarInactiveTintColor:'#bd61A6',
-        tabBarLabelStyle:{fontSize:12,},
+        tabBarLabelStyle:{fontSize:12, fontFamily: 'GillSans'},
         tabBarButton: HapticTab,
        
       }}>

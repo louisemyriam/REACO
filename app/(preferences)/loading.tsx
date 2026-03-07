@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '600',
+    fontFamily: 'GillSans',
     color: '#2D1623',
     textAlign: 'center',
     marginTop: 10,
