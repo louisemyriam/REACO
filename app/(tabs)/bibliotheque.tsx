@@ -15,58 +15,71 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { useLibraryStore } from '../store/libraryStore';
 
-
 type Book = {
   id: string;
   title: string;
   coverUrl: string;
+  progress?: number;
+  description?: string;
 };
 
 const LECTURES: Book[] = [
   {
     id: '1',
-    title: 'Légitime démence',
+    title: 'Roméo et Juliette',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1691515262l/195910083.jpg',
+      'https://images.epagine.fr/094/9782264081094_1_75.jpg',
+    progress: 23,
+    description:
+      "L’histoire tragique de deux amants issus de familles ennemies, dont l’amour impossible est devenu l’un des plus grands classiques de la littérature.",
   },
   {
     id: '2',
-    title: 'La librairie des chats noirs',
+    title: 'Dracula',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1689174608l/182484156.jpg',
-  },
-  {
-    id: '3',
-    title: 'Faux-semblants',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
-  },
-  {
-    id: '4',
-    title: 'Méfie-toi',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
+      'https://products-images.di-static.com/image/bram-stoker-dracula/9781435129733-475x500-1.jpg',
+    progress: 61,
+    description:
+      "Un roman gothique emblématique où mystère, tension et horreur se mêlent autour de l’inquiétant comte Dracula.",
   },
 ];
 
 const WISHLIST: Book[] = [
   {
     id: 'w1',
-    title: 'La femme de ménage voit tout',
+    title: 'Les Misérables',
     coverUrl:
-      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/25_9782290415634_1_75.jpg',
+      'https://m.media-amazon.com/images/I/71lxLN4vorL.jpg',
+    progress: 0,
+    description:
+      "Une fresque monumentale sur la misère, la justice, la rédemption et la condition humaine dans la France du XIXe siècle.",
   },
   {
     id: 'w2',
-    title: 'Conte de fées',
+    title: 'Pride and Prejudice',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
+      'https://editions-hauteville.fr/media/cache/book/17/9782820519917.jpg',
+    progress: 0,
+    description:
+      "Une romance classique pleine d’esprit sur les apparences, les jugements hâtifs et l’évolution des sentiments.",
   },
   {
     id: 'w3',
-    title: 'It Ends With Us',
+    title: 'Little Women',
     coverUrl:
-      'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+    progress: 0,
+    description:
+      "Le récit tendre et marquant de quatre sœurs qui grandissent, rêvent et apprennent à trouver leur place dans le monde.",
+  },
+  {
+    id: 'w4',
+    title: 'Jane Eyre',
+    coverUrl:
+      'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+    progress: 0,
+    description:
+      "Le parcours intense d’une jeune femme indépendante, entre épreuves, secrets et quête de dignité.",
   },
 ];
 
@@ -76,31 +89,57 @@ export default function BibliothequeScreen() {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const { lectures, wishlist } = useLibraryStore();
-  const lecturesAll = useMemo(() => [...lectures, ...LECTURES], [lectures]);
-const wishlistAll = useMemo(() => [...wishlist, ...WISHLIST], [wishlist]);
 
+  const lecturesAll = useMemo(() => {
+    const merged = [...lectures, ...LECTURES];
+    const unique = merged.filter(
+      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
+    );
+    return unique.slice(0, 2);
+  }, [lectures]);
+
+  const wishlistAll = useMemo(() => {
+    const merged = [...wishlist, ...WISHLIST];
+    const unique = merged.filter(
+      (book, index, self) => index === self.findIndex((b) => b.id === book.id)
+    );
+    return unique.slice(0, 4);
+  }, [wishlist]);
 
   const screenW = Dimensions.get('window').width;
   const gap = 12;
   const padding = 18;
 
   const gridItemW = Math.floor((screenW - padding * 2 - gap) / 2);
-  const gridItemH = Math.floor(gridItemW * 1.05); // un peu moins haut = plus proche maquette
+  const gridItemH = Math.floor(gridItemW * 1.05);
 
-  const wishW = gridItemW; // même largeur que les cartes en haut (maquette)
+  const wishW = gridItemW;
   const wishH = Math.floor(wishW * 1.05);
 
   const lecturesFiltered = useMemo(() => {
     const s = search.trim().toLowerCase();
     if (!s) return lecturesAll;
     return lecturesAll.filter((b) => b.title.toLowerCase().includes(s));
-  }, [search]);
+  }, [search, lecturesAll]);
 
   const wishlistFiltered = useMemo(() => {
     const s = search.trim().toLowerCase();
     if (!s) return wishlistAll;
-return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
-  }, [search]);
+    return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
+  }, [search, wishlistAll]);
+
+  const openBook = (item: Book) => {
+    router.push({
+      pathname: '/book/[id]',
+      params: {
+        id: item.id,
+        title: item.title,
+        coverUrl: item.coverUrl,
+        progress: String(item.progress ?? 0),
+        description: item.description ?? '',
+      },
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -113,7 +152,6 @@ return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
-            {/* Search */}
             <View style={styles.searchBox}>
               <TextInput
                 value={search}
@@ -125,16 +163,13 @@ return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
               <Ionicons name="search" size={18} color="rgba(41,20,37,0.55)" />
             </View>
 
-            {/* Filters row */}
             <Pressable style={styles.filtersRow} onPress={() => setFiltersOpen(true)}>
               <Ionicons name="funnel-outline" size={16} color="#BD61A6" />
               <Text style={styles.filtersText}>Filtres</Text>
             </Pressable>
 
-            {/* Title */}
             <Text style={styles.h1}>Ajoutez vos livres</Text>
 
-            {/* Add/Scan box */}
             <Pressable style={styles.scanBox} onPress={() => router.push('/scanner-screen')}>
               <View style={styles.scanCornerTL} />
               <View style={styles.scanCornerTR} />
@@ -146,27 +181,25 @@ return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
               </View>
             </Pressable>
 
-            {/* Section: Vos lectures */}
             <Text style={styles.sectionTitle}>Vos lectures</Text>
           </View>
         }
         renderItem={({ item }) => (
           <View style={{ width: gridItemW, marginBottom: 12 }}>
-            <Pressable style={[styles.bookCard, { height: gridItemH }]}>
+            <Pressable
+              style={[styles.bookCard, { height: gridItemH }]}
+              onPress={() => openBook(item)}
+            >
               <Image
                 source={{ uri: item.coverUrl }}
                 style={StyleSheet.absoluteFillObject}
                 contentFit="cover"
               />
             </Pressable>
-
-            {/* Maquette: pas de titre affiché */}
-            {/* <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text> */}
           </View>
         )}
         ListFooterComponent={
           <View style={{ paddingTop: 8 }}>
-            {/* Wishlist */}
             <Text style={[styles.sectionTitle, { marginTop: 6 }]}>Liste de souhaits</Text>
 
             <FlatList
@@ -177,27 +210,25 @@ return wishlistAll.filter((b) => b.title.toLowerCase().includes(s));
               ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
               renderItem={({ item }) => (
                 <View style={{ width: wishW }}>
-                  <Pressable style={[styles.bookCard, { width: wishW, height: wishH }]}>
+                  <Pressable
+                    style={[styles.bookCard, { width: wishW, height: wishH }]}
+                    onPress={() => openBook(item)}
+                  >
                     <Image
                       source={{ uri: item.coverUrl }}
                       style={StyleSheet.absoluteFillObject}
                       contentFit="cover"
                     />
                   </Pressable>
-
-                  {/* Maquette: pas de titre affiché */}
-                  {/* <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text> */}
                 </View>
               )}
             />
 
-            {/* IMPORTANT: espace pour éviter que la tab bar cache le bas */}
             <View style={{ height: 110 }} />
           </View>
         }
       />
 
-      {/* Filters modal */}
       <Modal visible={filtersOpen} transparent animationType="fade">
         <Pressable style={styles.modalOverlay} onPress={() => setFiltersOpen(false)}>
           <Pressable style={styles.modalCard} onPress={() => {}}>
@@ -343,13 +374,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     marginTop: 14,
     marginBottom: 10,
-    fontSize: 24, // maquette: titre plus gros
+    fontSize: 24,
     fontWeight: '900',
     color: '#291425',
   },
 
   bookCard: {
-    borderRadius: 18, // un poil plus “soft” comme maquette
+    borderRadius: 18,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -363,7 +394,6 @@ const styles = StyleSheet.create({
     color: '#291425',
   },
 
-  // Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.35)',

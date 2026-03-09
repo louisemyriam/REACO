@@ -43,29 +43,28 @@ export default function ProfilScreen() {
     () => [
       {
         id: 'b1',
-        title: 'Légitime démence',
-        coverUrl:
-          'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1691515262l/195910083.jpg',
-      },
+      title: 'Pride and Prejudice',
+      coverUrl:
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg', },
       {
         id: 'b2',
-        title: 'Méfie-toi',
+        title: 'It ends with us',
         coverUrl:
-          'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
-        badge: 'NOUVEAUTÉ',
+          'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+        //badge: 'NOUVEAUTÉ',
       },
       {
         id: 'b3',
         title: 'Et tombent les têtes',
         coverUrl:
-          'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1698004214l/199709804.jpg',
+          'https://media.hachette.fr/imgArticle/LGFLIVREDEPOCHE/2025/9782253940173-001-X.jpeg?source=web&v=01960388199d5179a0316f4bed7357a5',
       },
       {
         id: 'b4',
         title: 'Conte de fées',
         coverUrl:
-          'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
-        badge: 'NOUVEAUTÉ',
+          'https://m.media-amazon.com/images/I/714rEAlmZLL.jpg',
+        //badge: 'NOUVEAUTÉ',
       },
     ],
     []

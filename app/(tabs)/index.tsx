@@ -25,176 +25,263 @@ type Book = {
 const BOOKS_NEW: Book[] = [
   {
     id: '1',
-    title: 'Some Girls do',
+    title: 'Pride and Prejudice',
     coverUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWvPOe6v3wWmdEJXlcM--WdxKn9OlGA1Ue2A&s',
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: '2',
-    title: 'La femme de ménage',
-    coverUrl: 'https://m.media-amazon.com/images/I/613H6840ArL.jpg',
+    title: 'Jane Eyre',
+    coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+    //badge: 'NOUVEAUTÉ',
   },
   {
     id: '3',
-    title: 'The Shining',
+    title: 'Little Women',
     coverUrl:
-      'https://preview.redd.it/new-king-editions-v0-khd2lqh0mcld1.jpg?width=640&crop=smart&auto=webp&s=c87f91735c791bf93465dd0a378455da1f611221',
-    badge: 'NOUVEAUTÉ',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
   },
+  
   {
     id: '4',
-    title: 'It Ends With Us',
-    coverUrl:
-      'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+    title: 'Wuthering Heights',
+    coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
-];
-
-const BOOKS_FOR_YOU: Book[] = [
-  {
+  /*{
     id: '5',
-    title: 'La femme de ménage voit tout',
+    title: 'The Picture of Dorian Gray',
     coverUrl:
-      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/25_9782290415634_1_75.jpg',
+      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: '6',
-    title: 'Reminders of him',
+    title: 'Frankenstein',
     coverUrl:
-      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/3_9782755670790_1_75.jpg',
+      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+  },*/
+ {
+  id: '7',
+  title: 'Hauts de Hurelevant',
+  coverUrl:
+    ' https://editions-hauteville.fr/media/cache/book/73/9782381224473.jpg',
+},
+ ];
+
+const BOOKS_FOR_YOU: Book[] = [
+  {
+    id: 'fy1',
+    title: 'Pride and Prejudice',
+    coverUrl:
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
   {
-    id: '7',
-    title: 'La librairie morisaki',
+    id: 'fy2',
+    title: 'Little Women',
     coverUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTucWZWAzV9HBtl4h18XCa4iCw9xHCLGSSS6g&s',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+  },
+  {
+    id: 'fy3',
+    title: 'Jane Eyre',
+    coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+  },
+  {
+    id: 'fy4',
+    title: 'The Picture of Dorian Gray',
+    coverUrl:
+      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+  },
+  {
+    id: 'fy5',
+    title: 'Wuthering Heights',
+    coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
 ];
 
 const BOOKS_MOMENT: Book[] = [
   {
     id: 'm1',
-    title: 'Conte de fées',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1642954550l/60177373.jpg',
-    badge: 'NOUVEAUTÉ',
+    title: '1984',
+    coverUrl: 'https://cdn1.booknode.com/book_cover/72/1984-72084-264-432.webp',
+    badge: 'POPULAIRE',
   },
   {
     id: 'm2',
-    title: 'La librairie des chats noirs',
+    title: 'Frankenstein',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1689174608l/182484156.jpg',
+      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'm3',
-    title: 'Méfie-toi',
+    title: 'Little Women',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+  },
+  {
+    id: 'm4',
+    title: 'Pride and Prejudice',
+    coverUrl:
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
 ];
 
 const BOOKS_FRIENDS: Book[] = [
   {
-    id: '11',
-    title: 'Et tombent les têtes',
+    id: 'fr1',
+    title: 'Little Women',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1698004214l/199709804.jpg',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
   },
   {
-    id: '12',
-    title: 'Légitime démence',
+    id: 'fr2',
+    title: 'Pride and Prejudice',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1691515262l/195910083.jpg',
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
   {
-    id: '13',
-    title: 'Méfie-toi',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
-    badge: 'NOUVEAUTÉ',
+    id: 'fr3',
+    title: 'Jane Eyre',
+    coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+  },
+  {
+    id: 'fr4',
+    title: '1984',
+    coverUrl: 'https://cdn1.booknode.com/book_cover/72/1984-72084-264-432.webp',
   },
 ];
 
 const BOOKS_FANTASY: Book[] = [
   {
-    id: '8',
-    title: 'Harry Potter',
+    id: 'f1',
+    title: 'Frankenstein',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022l/3.jpg',
+      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
   },
   {
-    id: '9',
-    title: 'Anne of Green Gables',
+    id: 'f2',
+    title: 'The Picture of Dorian Gray',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
-  },
-  {
-    id: '10',
-    title: 'Blue is a darkness…',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1675643000l/75557739.jpg',
+      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
   },
 ];
 
 const BOOKS_THRILLER: Book[] = [
   {
     id: 't1',
-    title: 'Et tombent les têtes',
-    coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1698004214l/199709804.jpg',
+    title: '1984',
+    coverUrl: 'https://cdn1.booknode.com/book_cover/72/1984-72084-264-432.webp',
   },
   {
     id: 't2',
-    title: 'Légitime démence',
+    title: 'Frankenstein',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1691515262l/195910083.jpg',
+      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 't3',
-    title: 'Méfie-toi',
+    title: 'The Picture of Dorian Gray',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1564472250l/51460410.jpg',
+      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
   },
+  {
+    id: 't4',
+    title: 'Et tombent les têtes',
+    coverUrl:
+      'https://media.hachette.fr/imgArticle/LGFLIVREDEPOCHE/2025/9782253940173-001-X.jpeg?source=web&v=01960388199d5179a0316f4bed7357a5',
+  },
+  
 ];
 
 const BOOKS_ROMANCE: Book[] = [
   {
     id: 'r1',
-    title: 'It Ends With Us',
+    title: 'Pride and Prejudice',
     coverUrl:
-      'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'r2',
-    title: 'Reminders of him',
+    title:'Roméo et Juliette',
     coverUrl:
-      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/3_9782755670790_1_75.jpg',
+      'https://images.epagine.fr/094/9782264081094_1_75.jpg',
   },
   {
     id: 'r3',
-    title: 'Some Girls do',
+    title: 'It ends with us',
     coverUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWvPOe6v3wWmdEJXlcM--WdxKn9OlGA1Ue2A&s',
+      'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+    //badge: 'NOUVEAUTÉ',
+  },
+  {
+    id: 'r4',
+    title: 'Little Women',
+    coverUrl:
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+  },
+  {
+    id: 'r5',
+    title: 'Jane Eyre',
+    coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+  },
+  {
+    id: 'r6',
+    title: 'Wuthering Heights',
+    coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
 ];
 
-const BOOKS_COZY: Book[] = [
+const BOOKS_CLASSICS: Book[] = [
   {
     id: 'c1',
-    title: 'La librairie morisaki',
+    title: 'Little Women',
     coverUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTucWZWAzV9HBtl4h18XCa4iCw9xHCLGSSS6g&s',
+      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
   },
   {
     id: 'c2',
-    title: 'Anne of Green Gables',
+    title: 'Pride and Prejudice',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600871089l/8127.jpg',
+      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'c3',
-    title: 'La librairie des chats noirs',
+    title: 'Jane Eyre',
+    coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
+  },
+  {
+    id: 'c4',
+    title: 'Wuthering Heights',
+    coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
+  },
+  {
+    id: 'c5',
+    title: 'Conte de fées',
     coverUrl:
-      'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1689174608l/182484156.jpg',
+      'https://m.media-amazon.com/images/I/714rEAlmZLL.jpg',
+    //badge: 'NOUVEAUTÉ',
+  },
+];
+
+const BOOKS_HORROR: Book[] = [
+  {
+    id: 'h1',
+    title: 'Frankenstein',
+    coverUrl:
+      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+  },
+  {
+    id: 'h2',
+    title: 'The Picture of Dorian Gray',
+    coverUrl:
+      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+  },
+];
+
+const BOOKS_DYSTOPIA: Book[] = [
+  {
+    id: 'd1',
+    title: '1984',
+    coverUrl: 'https://cdn1.booknode.com/book_cover/72/1984-72084-264-432.webp',
   },
 ];
 
@@ -273,7 +360,7 @@ export default function HomeScreen() {
 
       <FlatList
         data={[{ key: 'dummy' }]}
-        keyExtractor={(i) => i.key}
+        keyExtractor={(item) => item.key}
         renderItem={() => null}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.page}
@@ -288,7 +375,6 @@ export default function HomeScreen() {
               <Text style={styles.bigTitle}>BIENVENUE</Text>
             </View>
 
-            {/* NOUVEAUTÉS : petit compartiment discret */}
             <View style={styles.softSection}>
               <Text style={styles.sectionTitle}>Nouveautés</Text>
 
@@ -360,7 +446,6 @@ export default function HomeScreen() {
               />
             </View>
 
-            {/* POUR VOUS : petit compartiment discret */}
             <View style={styles.softSection}>
               <View style={styles.rowTitle}>
                 <Text style={styles.sectionTitle}>Pour vous</Text>
@@ -371,7 +456,6 @@ export default function HomeScreen() {
               {renderBookRow(BOOKS_FOR_YOU)}
             </View>
 
-            {/* LIVRES DU MOMENT : gros compartiment visible */}
             <View style={styles.bigMomentSection}>
               <Text style={styles.sectionTitle}>Livres du moment !</Text>
 
@@ -428,7 +512,6 @@ export default function HomeScreen() {
               </View>
             </View>
 
-            {/* BAS : petits compartiments très doux */}
             <View style={styles.softSection}>
               <Text style={styles.sectionTitle}>Vos amis aiment</Text>
               {renderBookRow(BOOKS_FRIENDS)}
@@ -450,8 +533,18 @@ export default function HomeScreen() {
             </View>
 
             <View style={styles.softSection}>
-              <Text style={styles.sectionTitle}>Cozy</Text>
-              {renderBookRow(BOOKS_COZY)}
+              <Text style={styles.sectionTitle}>Classiques</Text>
+              {renderBookRow(BOOKS_CLASSICS)}
+            </View>
+
+            <View style={styles.softSection}>
+              <Text style={styles.sectionTitle}>Horreur</Text>
+              {renderBookRow(BOOKS_HORROR)}
+            </View>
+
+            <View style={styles.softSection}>
+              <Text style={styles.sectionTitle}>Dystopie</Text>
+              {renderBookRow(BOOKS_DYSTOPIA)}
             </View>
 
             <View style={{ height: 120 }} />
@@ -492,13 +585,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  // petits compartiments discrets
   softSection: {
     marginTop: 14,
     paddingVertical: 6,
   },
 
-  // gros compartiment visible pour livres du moment
   bigMomentSection: {
     marginTop: 16,
     padding: 14,

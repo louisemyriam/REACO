@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   btnPrimaryText: {
     color: '#FFFFFF',
-    fontWeight: '800',
+    fontWeight: '700',
     fontSize: 16,
     fontFamily: 'GillSans',
   },
@@ -98,8 +98,9 @@ const styles = StyleSheet.create({
   },
   btnConnexionText: {
     color: '#BD61A6',
-    fontWeight: '800',
+    fontWeight: '700',
     fontSize: 16,
+    fontFamily: 'GillSans',
   },
 
   // INVITE TEXT
@@ -109,5 +110,6 @@ const styles = StyleSheet.create({
     color: '#FCB040',
     textDecorationLine: 'underline',
     fontWeight: '600',
+    fontFamily: 'GillSans',
   },
 });

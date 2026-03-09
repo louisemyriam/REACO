@@ -15,8 +15,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   const [loaded] = useFonts({
-    GillSans: require('../assets/fonts/GillSans.ttf'),
-    'GillSans-Bold': require('../assets/fonts/GillSans-Bold.ttf'),
+    GillSans: require('../assets/fonts/GillSans.otf'),
+    'GillSans-Bold': require('../assets/fonts/GillSans-Bold.otf'),
   });
 
   useEffect(() => {

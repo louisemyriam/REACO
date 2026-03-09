@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     transform: [{ rotate: '-90deg' }],
   },
-  vvTabTextActive: { color: '#FFFFFF' },
+  vTabTextActive: { color: '#FFFFFF' },
   vTabTextInactive: { color: '#FBB040' },
 
   mascotWrap: {
@@ -625,11 +625,11 @@ const styles = StyleSheet.create({
   // EVENT
   eventCard: {
     marginTop: 14,
-    backgroundColor: 'rgba(255,255,255,0.45)',
+    backgroundColor: '#FCB040',
     borderRadius: 18,
     padding: 14,
     borderWidth: 3,
-    borderColor: '#3B82F6',
+    borderColor: '#FCB040',
   },
   eventTopRow: {
     flexDirection: 'row',
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     height: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.35)',
+    backgroundColor: 'rgba(255, 255, 255, 0.35)',
     overflow: 'hidden',
   },
   progressFill: { height: '100%', backgroundColor: '#FEF1EA' },

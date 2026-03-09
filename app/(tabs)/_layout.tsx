@@ -1,79 +1,89 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
 import { Ionicons } from '@expo/vector-icons';
+import { HapticTab } from '@/components/haptic-tab';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const theme = {
-    background: '#fff4ec',
-    text: '#291425',
-    tabBar: '#291425',
-  };
-
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor:"rgba(254, 246, 239, 0.9)",
-          height: 75,
-          paddingBottom: 10,
-          paddingTop: 10,
-
-        },
-        tabBarActiveTintColor:'#F5C542',
-        tabBarInactiveTintColor:'#bd61A6',
-        tabBarLabelStyle:{fontSize:12, fontFamily: 'GillSans'},
+        tabBarShowLabel: false,
         tabBarButton: HapticTab,
-       
-      }}>
-      
+        tabBarActiveTintColor: '#BD61A6',
+        tabBarInactiveTintColor: '#BD61A6',
+        tabBarStyle: {
+          position: 'absolute',
+          left: 18,
+          right: 18,
+          bottom: 18,
+          height: 60,
+          backgroundColor: 'rgba(254, 246, 239, 0.96)',
+          borderRadius: 999,
+          borderTopWidth: 0,
+          paddingTop: 10,
+          paddingBottom: 0,
+          elevation: 10,
+          shadowColor: '#000',
+          shadowOpacity: 0.12,
+          shadowOffset: { width: 0, height: 6 },
+          shadowRadius: 10,
+        },
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Acceuil',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="home-outline" color={color} />,
+          title: 'Accueil',
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={26} name="home-outline" color={color} />
+          ),
         }}
       />
 
       <Tabs.Screen
         name="recherche"
         options={{
-          title: 'recherche',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="search-outline" color={color} />,
+          title: 'Recherche',
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={26} name="search-outline" color={color} />
+          ),
         }}
       />
-      
+
       <Tabs.Screen
         name="fildactualite"
         options={{
-          title: 'Communaute',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
+          title: 'Communauté',
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={26} name="people-outline" color={color} />
+          ),
         }}
       />
-      
+
       <Tabs.Screen
         name="bibliotheque"
         options={{
           title: 'Bibliothèque',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="book-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={26} name="book-outline" color={color} />
+          ),
         }}
-        />
+      />
 
-    <Tabs.Screen
+      <Tabs.Screen
         name="profil"
         options={{
           title: 'Profil',
-          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Ionicons size={26} name="person-circle-outline" color={color} />
+          ),
         }}
       />
-      
-    
     </Tabs>
-    
   );
 }
