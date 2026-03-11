@@ -2,34 +2,78 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+
+import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const theme = {
+    background: '#fff4ec',
+    text: '#291425',
+    tabBar: '#291425',
+  };
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor:"rgba(254, 246, 239, 0.9)",
+          height: 75,
+          paddingBottom: 10,
+          paddingTop: 10,
+
+        },
+        tabBarActiveTintColor:'#F5C542',
+        tabBarInactiveTintColor:'#bd61A6',
+        tabBarLabelStyle:{fontSize:12,},
         tabBarButton: HapticTab,
+       
       }}>
+      
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Acceuil',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="home-outline" color={color} />,
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="recherche"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'recherche',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="search-outline" color={color} />,
         }}
       />
+      
+      <Tabs.Screen
+        name="fildactualite"
+        options={{
+          title: 'Communaute',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
+        }}
+      />
+      
+      <Tabs.Screen
+        name="bibliotheque"
+        options={{
+          title: 'Bibliothèque',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="book-outline" color={color} />,
+        }}
+        />
+
+    <Tabs.Screen
+        name="profil"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="person-outline" color={color} />,
+        }}
+      />
+      
+    
     </Tabs>
+    
   );
 }

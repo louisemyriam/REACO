@@ -1,4 +1,4 @@
-{
+      {
   "expo": {
     "name": "ridzy",
     "slug": "ridzy",
@@ -8,6 +8,7 @@
     "scheme": "ridzy",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
       "supportsTablet": true
     },
@@ -38,7 +39,8 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
