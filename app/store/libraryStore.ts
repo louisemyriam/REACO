@@ -5,24 +5,30 @@ export type LibraryBook = {
   title: string;
   coverUrl: string;
   isbn?: string;
+  description?: string;
+  progress?: number;
 };
 
-type State = {
+type LibraryState = {
   lectures: LibraryBook[];
   wishlist: LibraryBook[];
-  addLecture: (b: LibraryBook) => void;
-  addWishlist: (b: LibraryBook) => void;
+  addLecture: (book: LibraryBook) => void;
+  addWishlist: (book: LibraryBook) => void;
 };
 
-export const useLibraryStore = create<State>((set) => ({
+export const useLibraryStore = create<LibraryState>((set) => ({
   lectures: [],
   wishlist: [],
-  addLecture: (b) =>
-    set((s) => ({
-      lectures: [{ ...b }, ...s.lectures],
-    })),
-  addWishlist: (b) =>
-    set((s) => ({
-      wishlist: [{ ...b }, ...s.wishlist],
-    })),
+  addLecture: (book) =>
+    set((state) => {
+      const alreadyExists = state.lectures.some((b) => b.id === book.id);
+      if (alreadyExists) return state;
+      return { lectures: [book, ...state.lectures] };
+    }),
+  addWishlist: (book) =>
+    set((state) => {
+      const alreadyExists = state.wishlist.some((b) => b.id === book.id);
+      if (alreadyExists) return state;
+      return { wishlist: [book, ...state.wishlist] };
+    }),
 }));

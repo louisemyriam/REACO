@@ -8,26 +8,31 @@ export default function ScannerScreen() {
 
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-  const [barcode, setBarcode] = useState<string | null>(null);
 
   useEffect(() => {
     requestPermission();
   }, [requestPermission]);
 
   const handleBarcodeScanned = ({ data }: { type: string; data: string }) => {
-    if (scanned) return; // sécurité anti double-scan
+    if (scanned) return;
+  
     setScanned(true);
-    setBarcode(data);
-    console.log('Code scanné:', data);
-
-    // IMPORTANT: push en string => super fiable
-    router.push(`/scan-result?isbn=${encodeURIComponent(data)}`);
+  
+    const cleaned = (data ?? '').replace(/\s+/g, '').trim();
+    router.replace(`/scan-result?isbn=${encodeURIComponent(cleaned)}`);
   };
-
-  if (!permission?.granted) {
+  if (!permission) {
     return (
       <View style={styles.container}>
-        <Text>Permission caméra requise</Text>
+        <Text style={styles.text}>Chargement…</Text>
+      </View>
+    );
+  }
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Permission caméra requise</Text>
       </View>
     );
   }
@@ -36,33 +41,35 @@ export default function ScannerScreen() {
     <View style={styles.container}>
       <CameraView
         style={StyleSheet.absoluteFillObject}
-        barcodeScannerSettings={{ barcodeTypes: ['ean13', 'ean8', 'qr', 'code128'] }}
+        barcodeScannerSettings={{
+          barcodeTypes: ['ean13', 'ean8', 'qr', 'code128'],
+        }}
         onBarcodeScanned={handleBarcodeScanned}
       />
 
-      {barcode && (
-        <View style={styles.result}>
-          <Text>Code détecté :</Text>
-          <Text>{barcode}</Text>
-
-          <Text style={{ marginTop: 10 }} onPress={() => { setScanned(false); setBarcode(null); }}>
-            Scanner à nouveau
-          </Text>
-        </View>
-      )}
+      <View style={styles.overlay}>
+        <Text style={styles.overlayText}>Scannez le code ISBN du livre</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  result: {
+  container: { flex: 1, backgroundColor: '#000' },
+  text: { color: '#fff', textAlign: 'center' },
+  overlay: {
     position: 'absolute',
-    bottom: 50,
     left: 20,
     right: 20,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
+    bottom: 60,
+    padding: 16,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.8)',
+  },
+  overlayText: {
+    textAlign: 'center',
+    color: '#291425',
+    fontFamily: 'GillSans-Bold',
+    fontSize: 16,
   },
 });

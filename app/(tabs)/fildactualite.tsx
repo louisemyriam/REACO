@@ -90,7 +90,7 @@ const CLUBS: BookClub[] = [
   },
   {
     id: 'c2',
-    title: 'Bridgerton 3 & 4',
+    title: 'Le Petit Prince',
     coverUrl:
       'https://images.pexels.com/photos/1053687/pexels-photo-1053687.jpeg?auto=compress&cs=tinysrgb&w=1200',
     members: 342,
@@ -202,7 +202,7 @@ export default function FilActualiteScreen() {
           data={data as any}
           keyExtractor={(item: any) => item.id}
           showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
           ListHeaderComponent={
             <View>
               {/* Search */}
@@ -415,6 +415,13 @@ export default function FilActualiteScreen() {
                       contentFit="cover"
                     />
                   </View>
+              
+                  <View style={styles.clubInfo}>
+                    <Text style={styles.clubTitle}>{c.title}</Text>
+                    <Text style={styles.clubMeta}>
+                      {c.members} membres • {c.activity}
+                    </Text>
+                  </View>
                 </Pressable>
               );
             }
@@ -624,7 +631,7 @@ const styles = StyleSheet.create({
 
   // EVENT
   eventCard: {
-    marginTop: 14,
+    marginTop: 18,
     backgroundColor: '#FCB040',
     borderRadius: 18,
     padding: 14,
@@ -633,23 +640,32 @@ const styles = StyleSheet.create({
   },
   eventTopRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    gap: 10,
   },
-  eventTitle: { fontSize: 20, fontWeight: '900', color: '#FEF1EA', width: '70%' },
+  
+  eventTitle: {
+    flex: 1,
+    minWidth: 0,
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#FEF1EA',
+    marginRight: 10,
+  },
+  
   eventPill: {
+    flexShrink: 0,
+    alignSelf: 'flex-start',
     backgroundColor: 'rgba(255,255,255,0.35)',
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 14,
+    maxWidth: 110,
   },
-  eventPillText: { fontWeight: '900', color: '#FEF1EA' },
-  eventDesc: {
-    marginTop: 10,
-    fontWeight: '800',
-    color: 'rgba(255,255,255,0.95)',
-    lineHeight: 18,
+  
+  eventPillText: {
+    fontWeight: '900',
+    color: '#FEF1EA',
   },
   eventProgRow: {
     marginTop: 12,
@@ -669,6 +685,7 @@ const styles = StyleSheet.create({
 
   // FEED cards
   postCard: {
+    marginTop: 10,
     backgroundColor: 'rgba(255,255,255,0.55)',
     borderRadius: 18,
     padding: 14,
@@ -716,6 +733,7 @@ const styles = StyleSheet.create({
 
   // CLUB cards
   clubCard: {
+    marginTop: 10,
     backgroundColor: 'rgba(255,255,255,0.55)',
     borderRadius: 18,
     padding: 12,
@@ -822,4 +840,21 @@ const styles = StyleSheet.create({
   },
   roomName: { fontSize: 13, fontWeight: '900', color: '#291425' },
   roomDesc: { marginTop: 2, fontSize: 12, color: 'rgba(41,20,37,0.60)' },
+  clubInfo: {
+    marginTop: 12,
+    paddingHorizontal: 4,
+  },
+  
+  clubTitle: {
+    fontSize: 18,
+    color: '#291425',
+    fontFamily: 'GillSans-Bold',
+    marginBottom: 4,
+  },
+  
+  clubMeta: {
+    fontSize: 13,
+    color: 'rgba(41,20,37,0.65)',
+    fontFamily: 'GillSans',
+  },
 });

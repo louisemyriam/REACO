@@ -92,10 +92,9 @@ export default function BibliothequeScreen() {
 
   const lecturesAll = useMemo(() => {
     const merged = [...lectures, ...LECTURES];
-    const unique = merged.filter(
+    return merged.filter(
       (book, index, self) => index === self.findIndex((b) => b.id === book.id)
     );
-    return unique.slice(0, 2);
   }, [lectures]);
 
   const wishlistAll = useMemo(() => {
@@ -130,7 +129,7 @@ export default function BibliothequeScreen() {
 
   const openBook = (item: Book) => {
     router.push({
-      pathname: '/book/[id]',
+      pathname: '/reading/[id]',
       params: {
         id: item.id,
         title: item.title,

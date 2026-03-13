@@ -34,7 +34,7 @@ export default function LoginScreen() {
       return;
     }
   
-    router.replace('/(tabs)');
+    router.replace('/ouverture');
   };
   
 
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontFamily: 'GillSans-Bold',
     color: '#FBB040',
-    //fontWeight: '900',
+    fontWeight: '900',
   },
 
   logo: {

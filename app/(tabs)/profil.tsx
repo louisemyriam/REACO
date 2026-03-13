@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Href, useRouter } from 'expo-router';
+import FeatherIcon from '../../assets/icons/feather.svg';
 import React, { useMemo, useState } from 'react';
 import {
   Dimensions,
@@ -84,13 +85,29 @@ export default function ProfilScreen() {
         author: user.username,
         text: 'Je viens de finir un thriller… incroyable.',
         imageUrl:
-          'https://images.unsplash.com/photo-1455885666463-299283a18c03?w=1200&q=80&auto=format&fit=crop',
+          'https://www.lysdanslavallee.fr/sites/default/files/media/image/2025-04/etudes.jpg',
       },
     ],
     [user.username]
   );
 
-  const goalCards = useMemo(() => [1, 2], []);
+  const goalCards = useMemo(
+    () => [
+      {
+        id: 'g1',
+        title: 'Lire 3 romans',
+        image:
+          'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1200&q=80',
+      },
+      {
+        id: 'g2',
+        title: 'Lire 20 min / jour',
+        image:
+          'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80',
+      },
+    ],
+    []
+  );
 
   const coverW = Math.floor((screenW - 18 * 2 - 12 * 2) / 3);
   const coverH = Math.floor(coverW * 1.45);
@@ -134,9 +151,13 @@ export default function ProfilScreen() {
               <View style={{ flex: 1 }} />
 
               <View style={styles.plumesPill}>
-                <Text style={styles.plumesText}>{user.plumes}</Text>
-                <Ionicons name="feather-outline" size={14} color="#BD61A6" />
-              </View>
+  <Text style={styles.plumesText}>{user.plumes}</Text>
+  <Image
+    source={FeatherIcon}
+    style={{ width: 14, height: 14 }}
+    contentFit="contain"
+  />
+</View>
             </View>
 
             <View style={styles.statsRow}>
@@ -194,14 +215,22 @@ export default function ProfilScreen() {
               <Text style={styles.freezeBtnText}>
                 {streak.option1.label} {streak.option1.cost}
               </Text>
-              <Ionicons name="feather-outline" size={14} color="#BD61A6" />
+              <Image
+  source={FeatherIcon}
+  style={{ width: 14, height: 14 }}
+  contentFit="contain"
+/>
             </Pressable>
 
             <Pressable style={styles.freezeBtn}>
               <Text style={styles.freezeBtnText}>
                 {streak.option2.label} {streak.option2.cost}
               </Text>
-              <Ionicons name="feather-outline" size={14} color="#BD61A6" />
+              <Image
+  source={FeatherIcon}
+  style={{ width: 14, height: 14 }}
+  contentFit="contain"
+/>
             </Pressable>
           </View>
         </View>
@@ -227,13 +256,23 @@ export default function ProfilScreen() {
         <Text style={[styles.sectionTitle, { marginTop: 18 }]}>Créer tes objectifs</Text>
 
         <View style={styles.goalsGrid}>
-          {goalCards.map((n) => (
-            <Pressable
-              key={n}
-              style={styles.goalCard}
-              onPress={() => router.push('/objectif' as Href)}
-            />
-          ))}
+        {goalCards.map((g) => (
+  <Pressable
+    key={g.id}
+    style={styles.goalCard}
+    onPress={() => router.push('/objectif' as Href)}
+  >
+    <Image
+      source={{ uri: g.image }}
+      style={StyleSheet.absoluteFillObject}
+      contentFit="cover"
+    />
+
+    <View style={styles.goalOverlay}>
+      <Text style={styles.goalTitle}>{g.title}</Text>
+    </View>
+  </Pressable>
+))}
 
           <Pressable style={[styles.goalCard, styles.goalAdd]} onPress={() => router.push('/creerobjectif' as Href)}>
             <Ionicons name="add" size={28} color="rgba(41,20,37,0.55)" />
@@ -265,8 +304,13 @@ export default function ProfilScreen() {
             </View>
 
             <View style={styles.postImageWrap}>
-              <Image source={{ uri: p.imageUrl }} style={StyleSheet.absoluteFillObject} contentFit="cover" />
-            </View>
+  <Image
+    source={{ uri: p.imageUrl }}
+    style={StyleSheet.absoluteFillObject}
+    contentFit="cover"
+    transition={200}
+  />
+</View>
           </View>
         ))}
 
@@ -344,7 +388,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     backgroundColor: 'rgba(255,255,255,0.70)',
     borderWidth: 1,
-    borderColor: 'rgba(41,20,37,0.08)',
+    borderColor: '5B65AE',
   },
   plumesText: { fontWeight: '900', color: '#291425' },
 
@@ -437,8 +481,9 @@ const styles = StyleSheet.create({
   },
   goalCard: {
     flex: 1,
-    height: 90,
+    height: 110,
     borderRadius: 14,
+    overflow: 'hidden',
     backgroundColor: 'rgba(255,255,255,0.55)',
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.08)',
@@ -476,7 +521,12 @@ const styles = StyleSheet.create({
   },
   postAuthor: { fontWeight: '900', color: '#291425' },
   postText: { marginTop: 4, fontWeight: '700', color: 'rgba(41,20,37,0.70)', fontSize: 12 },
-  postImageWrap: { height: 180, backgroundColor: '#fff' },
+  postImageWrap: {
+    height: 180,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderColor: 'rgba(41,20,37,0.08)',
+  },
 
   // Floating button
   fab: {
@@ -492,4 +542,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(41,20,37,0.10)',
   },
+  goalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    padding: 10,
+    backgroundColor: 'rgba(0,0,0,0.15)',
+  },
+  
+  goalTitle: {
+    color: 'white',
+    fontWeight: '900',
+    fontSize: 13,
+  },
+
 });

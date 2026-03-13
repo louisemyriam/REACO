@@ -2,6 +2,27 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { HapticTab } from '@/components/haptic-tab';
+import { Image } from 'expo-image';
+
+import HouseIcon from '../../assets/icons/House_02.svg';
+import SearchIcon from '../../assets/icons/search-magnifying-glass.svg';
+import UsersIcon from '../../assets/icons/users-group.svg';
+import BookIcon from '../../assets/icons/book-open.svg';
+import ProfileIcon from '../../assets/icons/User_Circle.svg';
+
+function TabIcon({ source, color }: { source: any; color: string }) {
+  return (
+    <Image
+      source={source}
+      style={{
+        width: 30,
+        height: 30,
+        tintColor: color,
+      }}
+      contentFit="contain"
+    />
+  );
+}
 
 export default function TabLayout() {
   return (
@@ -40,7 +61,7 @@ export default function TabLayout() {
         options={{
           title: 'Accueil',
           tabBarIcon: ({ color }) => (
-            <Ionicons size={26} name="home-outline" color={color} />
+            <TabIcon source={HouseIcon} color={color} />
           ),
         }}
       />
@@ -50,7 +71,7 @@ export default function TabLayout() {
         options={{
           title: 'Recherche',
           tabBarIcon: ({ color }) => (
-            <Ionicons size={26} name="search-outline" color={color} />
+            <TabIcon source={SearchIcon} color={color} />
           ),
         }}
       />
@@ -60,7 +81,7 @@ export default function TabLayout() {
         options={{
           title: 'Communauté',
           tabBarIcon: ({ color }) => (
-            <Ionicons size={26} name="people-outline" color={color} />
+            <TabIcon source={UsersIcon} color={color} />
           ),
         }}
       />
@@ -70,7 +91,7 @@ export default function TabLayout() {
         options={{
           title: 'Bibliothèque',
           tabBarIcon: ({ color }) => (
-            <Ionicons size={26} name="book-outline" color={color} />
+            <TabIcon source={BookIcon} color={color} />
           ),
         }}
       />
@@ -80,7 +101,7 @@ export default function TabLayout() {
         options={{
           title: 'Profil',
           tabBarIcon: ({ color }) => (
-            <Ionicons size={26} name="person-circle-outline" color={color} />
+            <TabIcon source={ProfileIcon} color={color} />
           ),
         }}
       />

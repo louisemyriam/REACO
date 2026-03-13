@@ -1,7 +1,8 @@
 const { getDefaultConfig } = require('expo/metro-config');
 
+/** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
-config.resolver.assetExts.push('epub');
+config.resolver.assetExts = [...config.resolver.assetExts, 'epub'];
 
 module.exports = config;

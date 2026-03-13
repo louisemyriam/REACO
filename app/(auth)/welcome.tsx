@@ -39,7 +39,7 @@ export default function WelcomeScreen() {
             </Pressable>
 
             {/* INVITE */}
-            <Pressable onPress={() => router.replace('/(tabs)')}>
+            <Pressable onPress={() => router.replace('/ouverture')}>
               <Text style={styles.guestText}>Continuer en tant qu'invité</Text>
             </Pressable>
           </View>
@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '700',
     fontSize: 16,
-    fontFamily: 'GillSans',
+    fontFamily: 'GillSans-Bold',
+    //fontWeight: '800',
   },
 
   // CONNEXION (rose clair)
@@ -98,9 +99,9 @@ const styles = StyleSheet.create({
   },
   btnConnexionText: {
     color: '#BD61A6',
-    fontWeight: '700',
+    //fontWeight: '900',
     fontSize: 16,
-    fontFamily: 'GillSans',
+    fontFamily: 'GillSans-Bold',
   },
 
   // INVITE TEXT
@@ -110,6 +111,6 @@ const styles = StyleSheet.create({
     color: '#FCB040',
     textDecorationLine: 'underline',
     fontWeight: '600',
-    fontFamily: 'GillSans',
+    fontFamily: 'GillSans-Bold',
   },
 });

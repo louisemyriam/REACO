@@ -22,27 +22,27 @@ const GENRES: GenreItem[] = [
   {
     id: 'policier',
     label: 'Policier',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1689174608l/182484156.jpg',
+    coverUrl: 'https://m.media-amazon.com/images/I/71XjcRFzibL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'fantaisie',
     label: 'Fantaisie',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1468162656l/30688435.jpg',
+    coverUrl: 'https://cdn.kobo.com/book-images/cb7615e8-1d90-40a4-9da0-ae232dd2dee5/1200/1200/False/harry-potter-a-l-ecole-des-sorciers-1.jpg',
   },
   {
     id: 'romance',
     label: 'Romance',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1484903841l/33574138.jpg',
+    coverUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4eleHft7dpHCaP1w4h-0e_uNgoKn4iTCFjg&s',
   },
   {
     id: 'fiction',
     label: 'Fiction',
-    coverUrl: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1591128476l/53138192.jpg',
+    coverUrl: 'https://m.media-amazon.com/images/I/51sDdxuQVNL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'historique',
     label: 'Historique',
-    coverUrl: 'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/3_9782755670790_1_75.jpg',
+    coverUrl: 'https://m.media-amazon.com/images/I/81Qc6As2IpL._UF1000,1000_QL80_.jpg',
   },
   {
     id: 'comedie',
@@ -52,32 +52,32 @@ const GENRES: GenreItem[] = [
   {
     id: 'feelgood',
     label: 'Feel Good',
-    coverUrl: 'https://m.media-amazon.com/images/I/613H6840ArL.jpg',
+    coverUrl: 'https://i.ebayimg.com/images/g/jSMAAOSwVgdl01Mp/s-l400.jpg',
   },
   {
     id: 'thriller',
     label: 'Thriller',
-    coverUrl: 'https://preview.redd.it/new-king-editions-v0-khd2lqh0mcld1.jpg?width=640&crop=smart&auto=webp&s=c87f91735c791bf93465dd0a378455da1f611221',
+    coverUrl: 'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/25_9782290415634_1_75.jpg',
   },
   {
     id: 'polar',
     label: 'Polar',
-    coverUrl: 'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/25_9782290415634_1_75.jpg',
+    coverUrl: 'https://m.media-amazon.com/images/I/71FiZxUd9kL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'truecrime',
     label: 'True Crime',
-    coverUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTucWZWAzV9HBtl4h18XCa4iCw9xHCLGSSS6g&s',
+    coverUrl: 'https://static.livre-rare-book.com/pictures/MNO/16851_1.jpg',
   },
   {
     id: 'dystopie',
     label: 'Distopie',
-    coverUrl: 'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+    coverUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQogxUXoWEtndRag9TwFDky-3svWQt6QgXP8w&s',
   },
   {
     id: 'chicklit',
     label: 'Chick-lit',
-    coverUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWvPOe6v3wWmdEJXlcM--WdxKn9OlGA1Ue2A&s',
+    coverUrl: 'https://www.chroniquedisney.fr/imgFiliale/fox/2006-prada-00.jpg',
   },
 ];
 

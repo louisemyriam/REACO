@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   SafeAreaView,
   StyleSheet,
@@ -26,74 +27,73 @@ const BOOKS_NEW: Book[] = [
   {
     id: '1',
     title: 'Pride and Prejudice',
-    coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+    coverUrl: 'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
   {
     id: '2',
-    title: 'Jane Eyre',
+    title: 'Le portrait de Dorian Gray',
     coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
     //badge: 'NOUVEAUTÉ',
   },
   {
     id: '3',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
-  
+
   {
     id: '4',
-    title: 'Wuthering Heights',
+    title: 'Alice au pays des merveilles',
     coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
   /*{
     id: '5',
-    title: 'The Picture of Dorian Gray',
+    title: 'Le Signe des Quatre',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/61tPZAl8lTL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: '6',
     title: 'Frankenstein',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+      'https://www.editions-delcourt.fr/sites/default/files/product/9782413010654.jpg',
   },*/
- {
-  id: '7',
-  title: 'Hauts de Hurelevant',
-  coverUrl:
-    ' https://editions-hauteville.fr/media/cache/book/73/9782381224473.jpg',
-},
- ];
+  {
+    id: '5',
+    title: 'Hauts de Hurelevant',
+    coverUrl:
+      'https://img.livraddict.com/covers/699/699427//couv10570987.jpg',
+  },
+];
 
 const BOOKS_FOR_YOU: Book[] = [
   {
     id: 'fy1',
-    title: 'Pride and Prejudice',
+    title: 'Raison et sentiments',
     coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+      'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
   {
     id: 'fy2',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
   {
     id: 'fy3',
-    title: 'Jane Eyre',
+    title: 'Le portrait de Dorian Gray',
     coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
   },
   {
     id: 'fy4',
-    title: 'The Picture of Dorian Gray',
+    title: 'Le Signe des Quatre',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/61tPZAl8lTL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 'fy5',
-    title: 'Wuthering Heights',
+    title: 'Alice au pays des merveilles',
     coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
 ];
@@ -109,38 +109,38 @@ const BOOKS_MOMENT: Book[] = [
     id: 'm2',
     title: 'Frankenstein',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+      'https://www.editions-delcourt.fr/sites/default/files/product/9782413010654.jpg',
   },
   {
     id: 'm3',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
   {
     id: 'm4',
-    title: 'Pride and Prejudice',
+    title: 'raison et sentiments',
     coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+      'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
 ];
 
 const BOOKS_FRIENDS: Book[] = [
   {
     id: 'fr1',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
   {
     id: 'fr2',
-    title: 'Pride and Prejudice',
+    title: 'Raison et sentiments',
     coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+      'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
   {
     id: 'fr3',
-    title: 'Jane Eyre',
+    title: 'Le portrait de Dorian Gray',
     coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
   },
   {
@@ -155,13 +155,13 @@ const BOOKS_FANTASY: Book[] = [
     id: 'f1',
     title: 'Frankenstein',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+      'https://www.editions-delcourt.fr/sites/default/files/product/9782413010654.jpg',
   },
   {
     id: 'f2',
-    title: 'The Picture of Dorian Gray',
+    title: 'Le Signe des Quatre',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/61tPZAl8lTL._AC_UF1000,1000_QL80_.jpg',
   },
 ];
 
@@ -175,13 +175,13 @@ const BOOKS_THRILLER: Book[] = [
     id: 't2',
     title: 'Frankenstein',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+      'https://www.editions-delcourt.fr/sites/default/files/product/9782413010654.jpg',
   },
   {
     id: 't3',
-    title: 'The Picture of Dorian Gray',
+    title: 'Le Signe des Quatre',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/61tPZAl8lTL._AC_UF1000,1000_QL80_.jpg',
   },
   {
     id: 't4',
@@ -189,43 +189,42 @@ const BOOKS_THRILLER: Book[] = [
     coverUrl:
       'https://media.hachette.fr/imgArticle/LGFLIVREDEPOCHE/2025/9782253940173-001-X.jpeg?source=web&v=01960388199d5179a0316f4bed7357a5',
   },
-  
 ];
 
 const BOOKS_ROMANCE: Book[] = [
   {
     id: 'r1',
-    title: 'Pride and Prejudice',
+    title: 'Raison et sentiments',
     coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+      'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
   {
     id: 'r2',
-    title:'Roméo et Juliette',
+    title: 'Roméo et Juliette',
     coverUrl:
       'https://images.epagine.fr/094/9782264081094_1_75.jpg',
   },
   {
     id: 'r3',
-    title: 'It ends with us',
+    title: 'Jamais plus',
     coverUrl:
-      'https://m.media-amazon.com/images/I/91CqNElQaKL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/81tFVqLBpRL.jpg',
     //badge: 'NOUVEAUTÉ',
   },
   {
     id: 'r4',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
   {
     id: 'r5',
-    title: 'Jane Eyre',
+    title: 'Le portrait de Dorian Gray',
     coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
   },
   {
     id: 'r6',
-    title: 'Wuthering Heights',
+    title: 'Alice au pays des merveilles',
     coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
 ];
@@ -233,24 +232,24 @@ const BOOKS_ROMANCE: Book[] = [
 const BOOKS_CLASSICS: Book[] = [
   {
     id: 'c1',
-    title: 'Little Women',
+    title: 'Les quatre filles du docteur March',
     coverUrl:
-      'https://fr.shopping.rakuten.com/photo/little-women-louisa-may-alcott-1034341377_ML.jpg',
+      'https://cdn.cultura.com/cdn-cgi/image/width=830/media/pim/TITELIVE/80_9782010023668_1_75.jpg',
   },
   {
     id: 'c2',
-    title: 'Pride and Prejudice',
+    title: 'Raison et sentiments',
     coverUrl:
-      'https://m.media-amazon.com/images/I/818mKxj9pAL._AC_UF1000,1000_QL80_.jpg',
+      'https://media.groupe.gallimard.fr/couvHD/J05298.jpg',
   },
   {
     id: 'c3',
-    title: 'Jane Eyre',
+    title: 'Le portrait de Dorian Gray',
     coverUrl: 'https://images.epagine.fr/799/9782073061799_1_75.jpg',
   },
   {
     id: 'c4',
-    title: 'Wuthering Heights',
+    title: 'Alice au pays des merveilles',
     coverUrl: 'https://m.media-amazon.com/images/I/91yLiYO7jtL.jpg',
   },
   {
@@ -267,13 +266,13 @@ const BOOKS_HORROR: Book[] = [
     id: 'h1',
     title: 'Frankenstein',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81D0ziLvzwL._AC_UF1000,1000_QL80_.jpg',
+      'https://www.editions-delcourt.fr/sites/default/files/product/9782413010654.jpg',
   },
   {
     id: 'h2',
-    title: 'The Picture of Dorian Gray',
+    title: 'Le Signe des Quatre',
     coverUrl:
-      'https://m.media-amazon.com/images/I/81vCurF2jDL._AC_UF1000,1000_QL80_.jpg',
+      'https://m.media-amazon.com/images/I/61tPZAl8lTL._AC_UF1000,1000_QL80_.jpg',
   },
 ];
 
@@ -292,6 +291,7 @@ const HERO_ITEM_HEIGHT = Math.floor(HERO_ITEM_WIDTH * 1.4);
 const HERO_SPACING = 18;
 
 export default function HomeScreen() {
+  const router = useRouter();
   const smallW = 105;
   const smallH = Math.floor(smallW * 1.45);
 
@@ -320,6 +320,24 @@ export default function HomeScreen() {
     });
   };
 
+  const openBook = (item: Book) => {
+    if (item.id === '1') {
+      router.push({
+        pathname: '/book/[id]',
+        params: { id: '3' },
+      });
+      return;
+    }
+
+    if (item.id === 'm2') {
+      router.push({
+        pathname: '/book/[id]',
+        params: { id: '4' },
+      });
+      return;
+    }
+  };
+
   const renderBookRow = (books: Book[]) => (
     <FlatList
       horizontal
@@ -329,7 +347,10 @@ export default function HomeScreen() {
       ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
       renderItem={({ item }) => (
         <View style={{ width: smallW }}>
-          <Pressable style={[styles.smallCard, { width: smallW, height: smallH }]}>
+          <Pressable
+  style={[styles.smallCard, { width: smallW, height: smallH }]}
+  onPress={() => openBook(item)}
+>
             <Image
               source={{ uri: item.coverUrl }}
               style={StyleSheet.absoluteFillObject}
@@ -428,7 +449,10 @@ export default function HomeScreen() {
                         opacity,
                       }}
                     >
-                      <Pressable style={[styles.heroCard, { height: HERO_ITEM_HEIGHT }]}>
+                     <Pressable
+  style={[styles.heroCard, { height: HERO_ITEM_HEIGHT }]}
+  onPress={() => openBook(item)}
+>
                         <Image
                           source={{ uri: item.coverUrl }}
                           style={StyleSheet.absoluteFillObject}
@@ -479,7 +503,10 @@ export default function HomeScreen() {
                 })}
                 renderItem={({ item }) => (
                   <View style={{ width: momentItemW }}>
-                    <View style={[styles.momentCard, { width: momentItemW, height: momentItemH }]}>
+                    <Pressable
+  style={[styles.momentCard, { width: momentItemW, height: momentItemH }]}
+  onPress={() => openBook(item)}
+>
                       <View style={{ flex: 1, paddingRight: 12 }}>
                         <Text style={styles.momentTitle}>{item.title.toUpperCase()}</Text>
                         <Text style={styles.momentText}>Découvre {item.title}</Text>
@@ -497,7 +524,7 @@ export default function HomeScreen() {
                           </View>
                         ) : null}
                       </View>
-                    </View>
+                    </Pressable>
                   </View>
                 )}
               />
